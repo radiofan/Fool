@@ -1,0 +1,16 @@
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.exe
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.deps.json
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.runtimeconfig.json
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.runtimeconfig.dev.json
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.dll
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\ref\LabProject.dll
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\bin\Debug\net5.0\LabProject.pdb
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.GeneratedMSBuildEditorConfig.editorconfig
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.AssemblyInfoInputs.cache
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.AssemblyInfo.cs
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.csproj.CoreCompileInputs.cache
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.dll
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\ref\LabProject.dll
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.pdb
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.genruntimeconfig.cache
+D:\WORK\политех\3.2\тестирование\IVT9X\#2\TestProject\LabProject\obj\Debug\net5.0\LabProject.csprojAssemblyReference.cache
