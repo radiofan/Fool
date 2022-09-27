@@ -1,0 +1,11 @@
+digraph "lab.ImpurityMineral.ImpurityMineral"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [label="lab.ImpurityMineral.Impurity\lMineral",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="steelblue1",style="solid"];
+  Node2 [label="lab.ImpurityMineral.Init",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classlab_1_1_impurity_mineral.html#a1ac6145c3c400906e19364cbb5d80cf8",tooltip=" "];
+}

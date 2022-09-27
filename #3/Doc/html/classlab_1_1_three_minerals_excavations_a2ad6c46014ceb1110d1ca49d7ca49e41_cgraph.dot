@@ -1,0 +1,11 @@
+digraph "lab.ThreeMineralsExcavations.Display"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [label="lab.ThreeMineralsExcavations.\lDisplay",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="производит вывод содержимого"];
+  Node1 -> Node2 [color="steelblue1",style="solid"];
+  Node2 [label="lab.Mineral.Display",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classlab_1_1_mineral.html#a2b49361abf02c93e800de30fd8300fa1",tooltip="выводит содержимое класса"];
+}

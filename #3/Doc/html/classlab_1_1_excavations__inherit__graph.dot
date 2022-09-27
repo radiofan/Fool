@@ -1,0 +1,14 @@
+digraph "lab.Excavations"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="lab.Excavations",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Раскопки"];
+  Node1 -> Node2 [dir="back",color="steelblue1",style="solid"];
+  Node2 [label="lab.MineralImpurityMineral\lExcavations",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classlab_1_1_mineral_impurity_mineral_excavations.html",tooltip="раскопки добывшие обычное ископаемое и ископаемое с примесями"];
+  Node1 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node3 [label="lab.ThreeMineralsExcavations",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classlab_1_1_three_minerals_excavations.html",tooltip="раскопки добывшие 3 ископаемого"];
+  Node3 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node4 [label="lab.Singleton_ThreeMinerals\lExcavations",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classlab_1_1_singleton___three_minerals_excavations.html",tooltip="одиночка для раскпок с тремя ископаемыми"];
+}
