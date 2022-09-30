@@ -103,22 +103,25 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 
 		/// тест реализации методов пары карт
-		TEST_METHOD(Test_CardCouple__methods){
-			//todo битая пара
-			//todo проверка на смену атаки после защиты
+		TEST_METHOD(Test_CardCouple__test_1){
 			CardCouple card_couple = CardCouple();
 			Assert::IsNull(card_couple.get_attack());  //по умолчанию пара пустая
 			Assert::IsNull(card_couple.get_defense()); 
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 			
 			Card card_1(5, Diamond);
 			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту без атакующей
 			Assert::IsTrue(card_couple.set_attack(&card_1));
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 
 			Assert::IsTrue(&card_1 == card_couple.get_attack());
+			
+			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту равной атакующей
+
+
 
 			Card card_2(4, Diamond);
 			Assert::IsFalse(card_couple.set_defense(&card_2)); //нельзя установить защитную карту слабже атакующей
-			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту равной атакующей
 			Assert::IsFalse(card_couple.set_defense(&card_1, Diamond)); //нельзя установить защитную карту равной атакующей (даже если они козыри)
 
 			//Card card_2(4, Diamond);
@@ -129,13 +132,42 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			
 			Card card_4(6, Diamond);
 			Assert::IsTrue(card_couple.set_defense(&card_4)); //можно установить защитную карту выше по рангу
+			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
+
+			Assert::IsTrue(&card_4 == card_couple.get_defense());
+			Assert::IsFalse(card_couple.set_attack(&card_2)); //нельзя сменять атакующую карту после установки защиты
 			
-			//Card card_5(6, Diamond);
+		}
+
+		/// тест реализации методов пары карт
+		TEST_METHOD(Test_CardCouple__test_2){
+			CardCouple card_couple = CardCouple();
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
+
+			Card card_1(5, Diamond);
+			Assert::IsTrue(card_couple.set_attack(&card_1));
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
+			
+			Card card_4(6, Diamond);
 			Assert::IsTrue(card_couple.set_defense(&card_4, Diamond)); //можно установить защитную карту выше по рангу (даже если они козыри)
+			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
+
+			Assert::IsTrue(&card_4 == card_couple.get_defense());
+		}
+
+		/// тест реализации методов пары карт
+		TEST_METHOD(Test_CardCouple__test_3){
+			CardCouple card_couple = CardCouple();
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
+
+			Card card_1(5, Diamond);
+			Assert::IsTrue(card_couple.set_attack(&card_1));
+			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 			
 			Card card_5(4, Heart);
 			Assert::IsTrue(card_couple.set_defense(&card_5, Heart)); //можно установить защитную карту ниже по рангу но козырь
-			
+			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
+
 			Assert::IsTrue(&card_5 == card_couple.get_defense());
 		}
 		
