@@ -7,7 +7,7 @@ class PackCards_defenition{
 
 		Card* trump;
 
-	public:
+	protected:
 		PackCards_defenition() : trump(nullptr){
 			//создаем все карты
 			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
@@ -17,6 +17,8 @@ class PackCards_defenition{
 			}
 			reset();
 		}
+
+	public:
 
 		void reset(){
 			pack_cards.clear();

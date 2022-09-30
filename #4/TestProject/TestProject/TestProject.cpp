@@ -177,6 +177,33 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			BrokenCards& broken_cards = BrokenCards::get_instance();
 			Assert::IsTrue(true);
 		}
+
+		/// тест реализации метода добавления пар карт в биту класса битых карт
+		TEST_METHOD(Test_BrokenCards__add){
+			BrokenCards& broken_cards = BrokenCards::get_instance();
+			broken_cards.reset();
+			Assert::AreEqual((uint8_t)0, broken_cards.count());
+
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			for(uint8_t i=0; i<3; i++){
+				CardCouple tmp = CardCouple();
+				tmp.set_attack(&(all_cards[i*2]));
+				tmp.set_defense(&(all_cards[i*2+1]));
+				broken_cards.add(tmp);
+			}
+			for(uint8_t i=6; i<36; i++){
+				CardCouple tmp = CardCouple();
+				tmp.set_attack(&(all_cards[i]));
+				broken_cards.add(tmp);
+			}
+			Assert::AreEqual((uint8_t)36, broken_cards.count());
+		}
 		
 
 		/// тест реализации синглтона класса колоды карт

@@ -21,7 +21,7 @@ class CardCouple{
 		}
 
 		bool set_defense(Card* Defense, CardSuit Trump_card = None){
-			if(!defense)
+			if(defense)
 				return false;
 			if(can_set_defense(Defense, Trump_card)){
 				defense = Defense;
