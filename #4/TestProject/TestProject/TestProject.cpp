@@ -4,10 +4,17 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 const wchar_t CostConvertor::cost_to_letter[] = {L'0', L'В', L'Д', L'К', L'Т'};
 
+TEST_MODULE_INITIALIZE(ModuleInitialize)
+{
+	Logger::WriteMessage(L"In Module Initialize");
+}
+
+
 TEST_CLASS(RADIOFAN_FOOL_Tester){
 	public:
 		
 		TEST_METHOD_INITIALIZE(INIT_METHOD){
+			Logger::WriteMessage(L"RADIOFAN_FOOL_Tester Initialize");
 		}
 
 		/*
@@ -74,12 +81,12 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			}
 		}
 		
-        /// тест геттеров карты
+		/// тест геттеров карты
 		TEST_METHOD(Test_Card__getters){
-            Card card(5, Spade);
-            Assert::AreEqual((uint8_t)5, card.get_cost());
-            Assert::AreEqual((int)Spade, (int)card.get_suit());
-        }
+			Card card(5, Spade);
+			Assert::AreEqual((uint8_t)5, card.get_cost());
+			Assert::AreEqual((int)Spade, (int)card.get_suit());
+		}
 		
 
 		/// тест реализации синглтона класса поля игры
@@ -94,11 +101,53 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			CardCouple card_couple();
 			Assert::IsTrue(true);
 		}
+
+		/// тест реализации методов пары карт
+		TEST_METHOD(Test_CardCouple){
+			CardCouple card_couple();
+			Assert::IsNull(card_couple.get_attack());  //по умолчанию пара пустая
+			Assert::IsNull(card_couple.get_defense()); 
+			
+			Card card_1(5, Diamond);
+			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту без атакующей
+			Assert::IsTrue(card_couple.set_attack(&card_1));
+
+			Assert::AreEqual(&card_1, card_couple.get_attack());
+
+			Card card_2(4, Diamond);
+			Assert::IsFalse(card_couple.set_defense(&card_2)); //нельзя установить защитную карту слабже атакующей
+			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту равной атакующей
+			Assert::IsFalse(card_couple.set_defense(&card_1, Diamond)); //нельзя установить защитную карту равной атакующей (даже если они козыри)
+
+			//Card card_2(4, Diamond);
+			Assert::IsFalse(card_couple.set_defense(&card_2, Diamond)); //нельзя установить защитную карту слабже атакующей (даже если они козыри)
+			
+			Card card_3(6, Heart);
+			Assert::IsFalse(card_couple.set_defense(&card_3)); //нельзя установить защитную карту другой масти (если она не козырь)
+			
+			Card card_4(6, Diamond);
+			Assert::IsTrue(card_couple.set_defense(&card_4)); //можно установить защитную карту выше по рангу
+			
+			//Card card_5(6, Diamond);
+			Assert::IsTrue(card_couple.set_defense(&card_4, Diamond)); //можно установить защитную карту выше по рангу (даже если они козыри)
+			
+			Card card_5(4, Heart);
+			Assert::IsTrue(card_couple.set_defense(&card_5, Heart)); //можно установить защитную карту ниже по рангу но козырь
+			
+			Assert::AreEqual(&card_5, card_couple.get_defense());
+		}
 		
 
 		/// тест реализации синглтона класса битых карт
 		TEST_METHOD(Test_BrokenCards){
 			BrokenCards& broken_cards = BrokenCards::get_instance();
+			Assert::IsTrue(true);
+		}
+		
+
+		/// тест реализации синглтона класса колоды карт
+		TEST_METHOD(Test_PackCards){
+			PackCards& pack_cards = PackCards::get_instance();
 			Assert::IsTrue(true);
 		}
 
