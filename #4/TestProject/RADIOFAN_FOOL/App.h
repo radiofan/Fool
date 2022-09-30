@@ -1,4 +1,9 @@
 #pragma once
+
+#include "CostConvertor.h"
+#include "Card.h"
+#include "Player.h"
+
 class App{
 	private:
 		App(){}
