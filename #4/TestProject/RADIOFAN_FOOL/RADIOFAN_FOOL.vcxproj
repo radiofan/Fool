@@ -143,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="BrokenCards.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="CardCouple.h" />
     <ClInclude Include="CostConvertor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayingField.h" />

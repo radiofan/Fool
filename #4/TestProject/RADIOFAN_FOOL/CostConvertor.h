@@ -1,21 +1,22 @@
-#pragma once
+#ifndef CostConvertor_H
+#define CostConvertor_H
 
 class CostConvertor{
 	private:
-		static const wchar_t cost_to_letter[5];
+        static const wchar_t cost_to_letter[5];
 	public:
 
 		/*
 		 * Конвертирует стоимость карты в букву
-         * @return
+		 * @return
 		 * 2-9 -> '2' - '9'
 		 * 10 -> '0'
 		 * 11 -> 'В'
 		 * 12 -> 'Д'
 		 * 13 -> 'К'
 		 * 14 -> 'Т'
-         * 
-         * @throw wchar_t*
+		 * 
+		 * @throw wchar_t*
 		 */
 		static wchar_t cost2letter(uint8_t cost){
 			if(cost > 1 && cost < 10)
@@ -28,15 +29,15 @@ class CostConvertor{
 
 		/*
 		 * Конвертирует букву в стоимость карты
-         * @return
+		 * @return
 		 * '2' - '9' -> 2-9
 		 * '0' -> 10
 		 * 'В' -> 11
 		 * 'Д' -> 12
 		 * 'К' -> 13
 		 * 'Т' -> 14
-         * 
-         * @throw wchar_t*
+		 * 
+		 * @throw wchar_t*
 		 */
 		static uint8_t letter2cost(wchar_t letter){
 			if(letter >= L'2' && letter <= L'9')
@@ -49,4 +50,5 @@ class CostConvertor{
 		}
 
 };
-const wchar_t CostConvertor::cost_to_letter[] = {L'0', L'В', L'Д', L'К', L'Т'};
+
+#endif // !CostConvertor_H

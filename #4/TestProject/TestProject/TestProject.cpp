@@ -2,14 +2,15 @@
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+const wchar_t CostConvertor::cost_to_letter[] = {L'0', L'В', L'Д', L'К', L'Т'};
 
 TEST_CLASS(RADIOFAN_FOOL_Tester){
 	public:
-		/*
+		
 		TEST_METHOD_INITIALIZE(INIT_METHOD){
-
 		}
 
+        /*
 		TEST_METHOD_CLEANUP(END_METHOD){
 
 		}
@@ -71,7 +72,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 
 		/// тест реализации метода конвертации буквы в стоимость
-		TEST_METHOD(Test_CostConvertor__cost2letter){
+		TEST_METHOD(Test_CostConvertor__letter2cost){
 			CostConvertor::letter2cost(L'\0');
 			Assert::IsTrue(true);
 		}
@@ -97,7 +98,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 
 		/// тест правильной работы метода конвертации буквы в стоимость
-		TEST_METHOD(Test_CostConvertor__cost2letter__work){
+		TEST_METHOD(Test_CostConvertor__letter2cost__work){
 			
 			for(wchar_t i=L'2'; i<L'9'; i++){
 				Assert::AreEqual((uint8_t)(i-L'0'), CostConvertor::letter2cost(i));

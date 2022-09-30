@@ -2,6 +2,8 @@
 
 #include "CostConvertor.h"
 #include "Card.h"
+#include "CardCouple.h"
+#include "BrokenCards.h"
 #include "Player.h"
 #include "PlayingField.h"
 
