@@ -5,8 +5,10 @@ class PackCards_defenition{
 		Card all_cards[36];
 		std::deque<Card*> pack_cards;
 
+		Card* trump;
+
 	public:
-		PackCards_defenition(){
+		PackCards_defenition() : trump(nullptr){
 			//создаем все карты
 			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
 				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
@@ -26,6 +28,8 @@ class PackCards_defenition{
 			for(uint8_t i=0; i<36; i++){
 				pack_cards.push_front(&(all_cards[indexes[i]]));
 			}
+
+			trump = nullptr;
 		}
 
 		Card* pop(){
@@ -39,6 +43,21 @@ class PackCards_defenition{
 
 		uint8_t count(){
 			return pack_cards.size();
+		}
+
+		Card* set_trump(){
+			if(pack_cards.empty())
+				throw "PackCards is empty";
+
+			Card* ret = pack_cards.front();
+			pack_cards.pop_front();
+			pack_cards.push_back(ret);
+			trump = ret;
+			return ret;
+		}
+
+		Card* get_trump(){
+			return trump;
 		}
 };
 
