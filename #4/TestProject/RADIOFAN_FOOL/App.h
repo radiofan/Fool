@@ -9,5 +9,4 @@ class App{
 			static App instance;
 			return instance;
 		}
-
 };
