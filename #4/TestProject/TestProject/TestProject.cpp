@@ -10,7 +10,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		TEST_METHOD_INITIALIZE(INIT_METHOD){
 		}
 
-        /*
+		/*
 		TEST_METHOD_CLEANUP(END_METHOD){
 
 		}
@@ -35,11 +35,50 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Card card();
 			Assert::IsTrue(true);
 		}
+
+		/// тест создания всех карт
+		TEST_METHOD(Test_Card_Construct){
+			for(uint8_t cost=0; cost<=14; cost++){
+				for(CardSuit card_suit=0; card_suit <= Spade; card_suit++){
+					try{
+						Card card(cost, card_suit);//конструктор с невыходящими за пределы свойствами не будет выкидывать исключение
+						Assert::IsTrue(true);
+					}catch(...){
+						Assert::IsTrue(false);
+					}
+				}
+			}
+			for(uint8_t cost=15; cost<=255; cost++){
+				for(CardSuit card_suit=0; card_suit <= Spade+1; card_suit++){
+					try{
+						Card card(cost, card_suit);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+						Assert::IsTrue(false);
+					}catch(...){
+						Assert::IsTrue(true);
+					}
+				}
+			}
+			for(uint8_t cost=0; cost<=14; cost++){
+				try{
+					Card card(cost, Spade+1);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+					Assert::IsTrue(false);
+				}catch(...){
+					Assert::IsTrue(true);
+				}
+			}
+		}
+		
+        /// тест геттеров карты
+		TEST_METHOD(Test_Card__getters){
+            Card card(5, Spade);
+            Assert::AreEqual((uint8_t)5, card.get_suit());
+            Assert::AreEqual(Spade, card.get_cost());
+        }
 		
 
 		/// тест реализации синглтона класса поля игры
 		TEST_METHOD(Test_PlayingField){
-            PlayingField& playing_field = PlayingField::get_instance();
+			PlayingField& playing_field = PlayingField::get_instance();
 			Assert::IsTrue(true);
 		}
 		
@@ -53,7 +92,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 
 		/// тест реализации синглтона класса битых карт
 		TEST_METHOD(Test_BrokenCards){
-            BrokenCards& broken_cards = BrokenCards::get_instance();
+			BrokenCards& broken_cards = BrokenCards::get_instance();
 			Assert::IsTrue(true);
 		}
 
@@ -81,8 +120,8 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		TEST_METHOD(Test_CostConvertor__cost2letter__work){
 			for(uint8_t i=15; i != 2; i++){
 				try{
-			        CostConvertor::cost2letter(i);
-                    Assert::IsTrue(false);
+					CostConvertor::cost2letter(i);
+					Assert::IsTrue(false);
 				}catch(...){
 					Assert::IsTrue(true);
 				}
@@ -90,11 +129,11 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			for(uint8_t i=2; i<10; i++){
 				Assert::AreEqual((wchar_t)(L'0'+i), CostConvertor::cost2letter(i));
 			}
-            Assert::AreEqual(L'0', CostConvertor::cost2letter(10));
-            Assert::AreEqual(L'В', CostConvertor::cost2letter(11));
-            Assert::AreEqual(L'Д', CostConvertor::cost2letter(12));
-            Assert::AreEqual(L'К', CostConvertor::cost2letter(13));
-            Assert::AreEqual(L'Т', CostConvertor::cost2letter(14));
+			Assert::AreEqual(L'0', CostConvertor::cost2letter(10));
+			Assert::AreEqual(L'В', CostConvertor::cost2letter(11));
+			Assert::AreEqual(L'Д', CostConvertor::cost2letter(12));
+			Assert::AreEqual(L'К', CostConvertor::cost2letter(13));
+			Assert::AreEqual(L'Т', CostConvertor::cost2letter(14));
 		}
 
 		/// тест правильной работы метода конвертации буквы в стоимость
@@ -103,11 +142,11 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			for(wchar_t i=L'2'; i<L'9'; i++){
 				Assert::AreEqual((uint8_t)(i-L'0'), CostConvertor::letter2cost(i));
 			}
-            Assert::AreEqual((uint8_t)10, CostConvertor::letter2cost(L'0'));
-            Assert::AreEqual((uint8_t)11, CostConvertor::letter2cost(L'В'));
-            Assert::AreEqual((uint8_t)12, CostConvertor::letter2cost(L'Д'));
-            Assert::AreEqual((uint8_t)13, CostConvertor::letter2cost(L'К'));
-            Assert::AreEqual((uint8_t)14, CostConvertor::letter2cost(L'Т'));
+			Assert::AreEqual((uint8_t)10, CostConvertor::letter2cost(L'0'));
+			Assert::AreEqual((uint8_t)11, CostConvertor::letter2cost(L'В'));
+			Assert::AreEqual((uint8_t)12, CostConvertor::letter2cost(L'Д'));
+			Assert::AreEqual((uint8_t)13, CostConvertor::letter2cost(L'К'));
+			Assert::AreEqual((uint8_t)14, CostConvertor::letter2cost(L'Т'));
 		}
 
 
