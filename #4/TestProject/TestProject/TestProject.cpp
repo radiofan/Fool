@@ -36,31 +36,37 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::IsTrue(true);
 		}
 
-		/// тест создания всех карт
+		/// тест конструктора всех карт
 		TEST_METHOD(Test_Card_Construct){
-			for(uint8_t cost=0; cost<=14; cost++){
-				for(CardSuit card_suit=0; card_suit <= Spade; card_suit++){
+			for(uint8_t cost=2; cost<=14; cost++){
+				for(int card_suit=1; card_suit <= Spade; card_suit++){
 					try{
-						Card card(cost, card_suit);//конструктор с невыходящими за пределы свойствами не будет выкидывать исключение
+						Card card(cost, (CardSuit)card_suit);//конструктор с невыходящими за пределы свойствами не будет выкидывать исключение
 						Assert::IsTrue(true);
 					}catch(...){
 						Assert::IsTrue(false);
 					}
 				}
 			}
-			for(uint8_t cost=15; cost<=255; cost++){
-				for(CardSuit card_suit=0; card_suit <= Spade+1; card_suit++){
+			for(uint8_t cost=15; cost != 2; cost++){
+				for(int card_suit=1; card_suit <= Spade+1; card_suit++){
 					try{
-						Card card(cost, card_suit);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+						Card card(cost, (CardSuit)card_suit);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
 						Assert::IsTrue(false);
 					}catch(...){
 						Assert::IsTrue(true);
 					}
 				}
 			}
-			for(uint8_t cost=0; cost<=14; cost++){
+			for(uint8_t cost=2; cost<=14; cost++){
 				try{
-					Card card(cost, Spade+1);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+					Card card(cost, (CardSuit)(Spade+1));//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+					Assert::IsTrue(false);
+				}catch(...){
+					Assert::IsTrue(true);
+				}
+				try{
+					Card card(cost, None);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
 					Assert::IsTrue(false);
 				}catch(...){
 					Assert::IsTrue(true);
@@ -71,8 +77,8 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
         /// тест геттеров карты
 		TEST_METHOD(Test_Card__getters){
             Card card(5, Spade);
-            Assert::AreEqual((uint8_t)5, card.get_suit());
-            Assert::AreEqual(Spade, card.get_cost());
+            Assert::AreEqual((uint8_t)5, card.get_cost());
+            Assert::AreEqual((int)Spade, (int)card.get_suit());
         }
 		
 
