@@ -21,23 +21,40 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::IsTrue(true);
 		}
 		
+
 		/// тест реализации класса игрока
 		TEST_METHOD(Test_Player){
 			Player player();
 			Assert::IsTrue(true);
 		}
 		
+
 		/// тест реализации класса карты
 		TEST_METHOD(Test_Card){
 			Card card();
 			Assert::IsTrue(true);
 		}
 		
+
 		/// тест реализации класса конвертора стоимости карты
 		TEST_METHOD(Test_CostConvertor){
 			CostConvertor cost_convertor();
 			Assert::IsTrue(true);
 		}
+
+		/// тест реализации метода конвертации стоимости в букву
+		TEST_METHOD(Test_CostConvertor__cost2letter){
+			CostConvertor::cost2letter(0);
+			Assert::IsTrue(true);
+		}
+
+		/// тест реализации метода конвертации буквы в стоимость
+		TEST_METHOD(Test_CostConvertor__cost2letter){
+			CostConvertor::letter2cost(L'\0');
+			Assert::IsTrue(true);
+		}
+
+
 
 
 };
