@@ -36,9 +36,9 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 		
 
-		/// тест реализации класса поля игры
+		/// тест реализации синглтона класса поля игры
 		TEST_METHOD(Test_PlayingField){
-			PlayingField playing_field();
+            PlayingField& playing_field = PlayingField::get_instance();
 			Assert::IsTrue(true);
 		}
 		

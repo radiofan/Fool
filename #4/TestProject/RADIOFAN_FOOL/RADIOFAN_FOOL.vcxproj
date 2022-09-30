@@ -146,6 +146,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="CostConvertor.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayingField.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
