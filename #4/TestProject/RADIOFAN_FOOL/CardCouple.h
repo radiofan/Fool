@@ -14,16 +14,24 @@ class CardCouple{
 		}
 
 		bool set_attack(Card* Attack){
+			if(attack)
+				return false;
 			attack = Attack;
 			return true;
 		}
 
 		bool set_defense(Card* Defense, CardSuit Trump_card = None){
+			if(!defense)
+				return false;
 			if(can_set_defense(Defense, Trump_card)){
 				defense = Defense;
 				return true;
 			}
 			return false;
+		}
+
+		bool is_broken(){
+			return !defense;
 		}
 
 		bool can_set_defense(Card* Defense, CardSuit Trump_card = None){
