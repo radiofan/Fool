@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <deque>
+#include <algorithm>
 #include <locale>
 //#include <codecvt>
 #include "conio.h"//_getch()

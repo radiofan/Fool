@@ -189,10 +189,27 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		TEST_METHOD(Test_PackCards){
 			PackCards& pack_cards = PackCards::get_instance();
 			pack_cards.reset();
-			Assert::AreEqual(36, pack_cards.count());
-			for(uint32_t i=0; i<pack_cards.count(); i++){
-				pack_cards.pop();
+			Assert::AreEqual((uint8_t)36, pack_cards.count());
+
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
 			}
+			
+			uint8_t len =pack_cards.count();
+			for(uint32_t i=0; i<len; i++){
+				Card* tmp = pack_cards.pop();
+				for(uint8_t i=0; i<all_cards.size(); i++){
+					if(tmp->get_cost() == all_cards[i].get_cost() && tmp->get_suit() == all_cards[i].get_suit()){
+						all_cards.erase(all_cards.begin()+i);
+					}
+				}
+			}
+
+			Assert::AreEqual((size_t)0, all_cards.size());
+
 			try{
 				pack_cards.pop();//взятие карты из пустой колоды
 				Assert::Fail();
