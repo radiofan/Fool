@@ -50,9 +50,9 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 		
 
-		/// тест реализации класса битых карт
+		/// тест реализации синглтона класса битых карт
 		TEST_METHOD(Test_BrokenCards){
-			BrokenCards broken_cards();
+            BrokenCards& broken_cards = BrokenCards::get_instance();
 			Assert::IsTrue(true);
 		}
 
