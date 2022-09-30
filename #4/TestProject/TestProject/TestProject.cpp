@@ -185,6 +185,22 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::IsTrue(true);
 		}
 
+		/// тест реализации метода взятия карты из колоды
+		TEST_METHOD(Test_PackCards){
+			PackCards& pack_cards = PackCards::get_instance();
+			pack_cards.reset();
+			Assert::AreEqual(36, pack_cards.count());
+			for(uint32_t i=0; i<pack_cards.count(); i++){
+				pack_cards.pop();
+			}
+			try{
+				pack_cards.pop();//взятие карты из пустой колоды
+				Assert::Fail();
+			}catch(...){
+				Assert::IsTrue(true);
+			}
+		}
+
 		
 
 		/// тест реализации класса конвертора стоимости карты
