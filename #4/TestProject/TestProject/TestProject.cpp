@@ -36,6 +36,28 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 		
 
+		/// тест реализации класса поля игры
+		TEST_METHOD(Test_PlayingField){
+			PlayingField playing_field();
+			Assert::IsTrue(true);
+		}
+		
+
+		/// тест реализации класса пары карт
+		TEST_METHOD(Test_CardCouple){
+			CardCouple card_couple();
+			Assert::IsTrue(true);
+		}
+		
+
+		/// тест реализации класса битых карт
+		TEST_METHOD(Test_BrokenCards){
+			BrokenCards broken_cards();
+			Assert::IsTrue(true);
+		}
+
+		
+
 		/// тест реализации класса конвертора стоимости карты
 		TEST_METHOD(Test_CostConvertor){
 			CostConvertor cost_convertor();
