@@ -25,3 +25,5 @@ hs_err_pid*
 .gitignore
 /.idea
 **/.vs
+**/debug
+**/release
