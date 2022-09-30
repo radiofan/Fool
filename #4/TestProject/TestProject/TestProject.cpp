@@ -103,8 +103,10 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 		}
 
 		/// тест реализации методов пары карт
-		TEST_METHOD(Test_CardCouple){
-			CardCouple card_couple();
+		TEST_METHOD(Test_CardCouple__methods){
+			//todo битая пара
+			//todo проверка на смену атаки после защиты
+			CardCouple card_couple = CardCouple();
 			Assert::IsNull(card_couple.get_attack());  //по умолчанию пара пустая
 			Assert::IsNull(card_couple.get_defense()); 
 			
@@ -112,7 +114,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту без атакующей
 			Assert::IsTrue(card_couple.set_attack(&card_1));
 
-			Assert::AreEqual(&card_1, card_couple.get_attack());
+			Assert::IsTrue(&card_1 == card_couple.get_attack());
 
 			Card card_2(4, Diamond);
 			Assert::IsFalse(card_couple.set_defense(&card_2)); //нельзя установить защитную карту слабже атакующей
@@ -134,7 +136,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Card card_5(4, Heart);
 			Assert::IsTrue(card_couple.set_defense(&card_5, Heart)); //можно установить защитную карту ниже по рангу но козырь
 			
-			Assert::AreEqual(&card_5, card_couple.get_defense());
+			Assert::IsTrue(&card_5 == card_couple.get_defense());
 		}
 		
 

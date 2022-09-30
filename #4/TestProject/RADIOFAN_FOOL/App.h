@@ -4,6 +4,7 @@
 #include "Card.h"
 #include "CardCouple.h"
 #include "BrokenCards.h"
+#include "PackCards.h"
 #include "Player.h"
 #include "PlayingField.h"
 
