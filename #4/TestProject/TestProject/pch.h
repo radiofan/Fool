@@ -7,5 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include "stdafx.h"
+#include "App.h"
 
 #endif //PCH_H
