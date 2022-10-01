@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <Windows.h>
 #include <algorithm>
 #include <locale>
 //#include <codecvt>
