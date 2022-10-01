@@ -21,6 +21,45 @@ namespace TestProject
 			Player player();
 			Assert::IsTrue(true);
 		}
+
+		// тест реализации PlayerType
+		TEST_METHOD(Test_Player__enum_PlayerType){
+			PlayerType tmp = (PlayerType)0;
+			Assert::AreEqual((int)None, (int)tmp);
+			
+			tmp = (PlayerType)1;
+			Assert::AreEqual((int)ATTACKER, (int)tmp);
+			tmp = (PlayerType)2;
+			Assert::AreEqual((int)DEFENDER, (int)tmp);
+			tmp = (PlayerType)3;
+			Assert::AreEqual((int)MAIN_ATTACKER, (int)tmp);
+		}
+
+		/// тест реализации методов работы с типом игрока класса игрока
+		TEST_METHOD(Test_Player_type){
+			Player player();
+
+			Assert::AreEqual((int)None, (int)player.get_type());
+			for(uint8_t i=1; i<=(int)MAIN_ATTACKER; i++){
+				player.set_type((PlayerType)i);
+				Assert::AreEqual(i, (int)player.get_type());
+			}
+			try{
+				player.set_type((PlayerType)(MAIN_ATTACKER+1));
+				Assert::Fail();
+			}catch(...){
+				Assert::IsTrue(true);
+			}
+
+		}
+
+		/// тест реализации методов работы с картами игрока класса игрока
+		TEST_METHOD(Test_Player_add_cards){
+			Player player();
+
+			Assert::AreEqual(0, player.count());
+			//todo расширить методы работы с картами икрока
+		}
 		
 		//карта Card
 		/// тест реализации класса карты
@@ -133,6 +172,18 @@ namespace TestProject
 				playing_field.get_card_couple(i).set_defense(&all_cards[1]);
 				Assert::IsTrue(playing_field.is_all_card_couples_broken());
 			}
+		}
+
+		/// тест реализации метода проверки возможности добавить пару на поле карт класса поля игры
+		TEST_METHOD(Test_PlayingField_can_add_card_couple){
+			PlayingField& playing_field = PlayingField::get_instance();
+			playing_field.reset();
+			for(uint8_t i=0; i<playing_field.MAX_CARD_COUPLES; i++){
+				Assert::IsTrue(playing_field.can_add_card_couple());
+				CardCouple tmp;
+				playing_field.add_card_couple(tmp);
+			}
+			Assert::IsFalse(playing_field.can_add_card_couple());
 		}
 		
 		//пара карт CardCouple
