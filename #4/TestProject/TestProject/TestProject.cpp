@@ -36,6 +36,32 @@ namespace TestProject
 			Assert::IsTrue(true);
 		}
 		
+		/// тест реализации метода сброса класса логики игры
+		TEST_METHOD(Test_GameLogic__get_instance){
+			GameLogic& game_logic = GameLogic::get_instance();
+			game_logic.reset();
+			Assert::AreEqual((uint8_t) 36, PackCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, BrokenCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, PlayingField::get_instance().count());
+			
+			CardCouple tmp = CardCouple();
+			tmp.set_attack(PackCards::get_instance().pop());
+			tmp.set_defense(PackCards::get_instance().pop());
+
+			PlayingField::get_instance().add_card_couple(tmp);
+
+			tmp = CardCouple();
+			tmp.set_attack(PackCards::get_instance().pop());
+			tmp.set_defense(PackCards::get_instance().pop());
+
+			BrokenCards::get_instance().add(tmp);
+
+			game_logic.reset();
+			Assert::AreEqual((uint8_t) 36, PackCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, BrokenCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, PlayingField::get_instance().count());
+		}
+		
 
 		//игрок Player
 		/// тест реализации класса игрока
@@ -288,6 +314,39 @@ namespace TestProject
 				playing_field.add_card_couple(tmp);
 			}
 			Assert::IsFalse(playing_field.can_add_card_couple());
+		}
+
+		/// тест реализации метода отправки пар карт в биту класса поля игры
+		TEST_METHOD(Test_PlayingField_can_add_card_couple){
+			PlayingField& playing_field = PlayingField::get_instance();
+
+			playing_field.reset();
+
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			CardCouple tmp = CardCouple();
+			tmp.set_attack(&all_cards[0]);
+			tmp.set_defense(&all_cards[1]);
+
+			playing_field.add_card_couple(tmp);
+			playing_field.move_cards_to_broken();
+			Assert::AreEqual((uint8_t) 2, BrokenCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, playing_field.count());
+
+			playing_field.add_card_couple(tmp);
+			playing_field.add_card_couple(tmp);
+			playing_field.add_card_couple(tmp);
+			playing_field.add_card_couple(tmp);
+			playing_field.add_card_couple(tmp);
+			playing_field.add_card_couple(tmp);
+			playing_field.move_cards_to_broken();
+			Assert::AreEqual((uint8_t) 14, BrokenCards::get_instance().count());
+			Assert::AreEqual((uint8_t) 0, playing_field.count());
 		}
 		
 		//пара карт CardCouple
