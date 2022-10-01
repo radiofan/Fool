@@ -8,6 +8,24 @@ namespace TestProject
 {
 	TEST_CLASS(TestProject){
 	public:
+
+
+		/// тест реализации и использования интерфейса рисования
+		TEST_METHOD(Test_DrawableInterface){
+			Drawable tmp = BrokenCards::get_instance().get_drawable();
+			tmp.draw();
+			tmp = Card().get_drawable();
+			tmp.draw();
+			tmp = CardCouple::get_instance().get_drawable();
+			tmp.draw();
+			tmp = PackCards::get_instance().get_drawable();
+			tmp.draw();
+			tmp = Player::get_instance().get_drawable();
+			tmp.draw();
+			tmp = PlayingField::get_instance().get_drawable();
+			tmp.draw();
+		}
+
 		
 		/// тест реализации синглтона класса приложения
 		TEST_METHOD(Test_App__get_instance){
