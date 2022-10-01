@@ -147,6 +147,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardCouple.h" />
     <ClInclude Include="CostConvertor.h" />
+    <ClInclude Include="Draw.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="PackCards.h" />
     <ClInclude Include="Player.h" />
