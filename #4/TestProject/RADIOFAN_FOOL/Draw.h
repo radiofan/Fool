@@ -1,29 +1,11 @@
 ﻿#pragma once
 
-class BrokenCards_defenition;
-class Card;
-class CardCouple;
-class PackCards_defenition;
-class Player;
-class PlayingField_defenition;
 class App_defenition;
 
 enum class PlayerDrawType{
 	HIDDEN,
 	CURRENT_HIDDEN,
 	CURRENT_OPEN
-};
-
-class NeedRedraw{
-	protected:
-		bool need_redraw = false;
-	public:
-		bool is_need_redraw(){
-			return need_redraw;
-		}
-		void redrawed(){
-			need_redraw = false;
-		}
 };
 
 class Draw{
@@ -63,6 +45,7 @@ class Draw{
 			for(uint8_t i=0; i<20; i++){
 				std::wcout << std::endl;
 			}
+			std::wcout << set_coord();
 		}
 
 		static void draw(BrokenCards_defenition& broken_cards, uint16_t x, uint16_t y){
@@ -70,6 +53,23 @@ class Draw{
 		}
 		static void draw(Card& card, uint16_t x, uint16_t y){
 
+			std::wstring out = (card.get_suit() == CardSuit::None ? L"▒▒▒▒▒▒" : L"      ");
+
+			std::wcout << SColor(card.get_suit() == CardSuit::None ? BackColor::GREEN : BackColor::WHITE, TextColor::RED_DARK);
+			for(uint8_t i=0; i<5; i++){
+				std::wcout << set_coord(x, y+i) << out;
+			}
+
+
+			if(card.get_suit() != CardSuit::None){
+				std::wcout << SColor(BackColor::WHITE, CostConvertor::suit2color(card.get_suit()));
+				std::wcout << set_coord(x+1, y+1) << CostConvertor::cost2letter(card.get_cost());
+				if(card.get_cost() == 10){
+					std::wcout << L"0";
+				}
+				std::wcout << set_coord(x+4, y+1) << CostConvertor::suit2letter(card.get_suit());
+			}
+			std::wcout << set_coord() << SColor();
 		}
 		static void draw(CardCouple& card_couple, uint16_t x, uint16_t y){
 

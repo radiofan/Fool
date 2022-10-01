@@ -10,7 +10,7 @@ class CostConvertor{
 		 * Конвертирует стоимость карты в букву
 		 * @return
 		 * 2-9 -> '2' - '9'
-		 * 10 -> '0'
+		 * 10 -> '1'
 		 * 11 -> 'В'
 		 * 12 -> 'Д'
 		 * 13 -> 'К'
@@ -31,7 +31,7 @@ class CostConvertor{
 		 * Конвертирует букву в стоимость карты
 		 * @return
 		 * '2' - '9' -> 2-9
-		 * '0' -> 10
+		 * '1' -> 10
 		 * 'В' -> 11
 		 * 'Д' -> 12
 		 * 'К' -> 13
@@ -47,6 +47,29 @@ class CostConvertor{
 					return i+10;
 			}
 			throw L"letter out of range";
+		}
+
+		static TextColor suit2color(CardSuit suit){
+			if(suit < CardSuit::Club){
+				return TextColor::RED_DARK;
+			}else{
+				return TextColor::BLACK;
+			}
+		}
+
+		static wchar_t suit2letter(CardSuit suit){
+			switch(suit){
+				case CardSuit::None:
+					return L' ';
+				case CardSuit::Heart:
+					return L'\x03';
+				case CardSuit::Diamond:
+					return L'\x04';
+				case CardSuit::Club:
+					return L'\x05';
+				case CardSuit::Spade:
+					return L'\x06';
+			}
 		}
 
 };

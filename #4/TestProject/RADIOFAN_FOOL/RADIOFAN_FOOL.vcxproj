@@ -149,6 +149,7 @@
     <ClInclude Include="CostConvertor.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="NeedRedraw.h" />
     <ClInclude Include="PackCards.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayingField.h" />
