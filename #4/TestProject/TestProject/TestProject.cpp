@@ -10,20 +10,16 @@ namespace TestProject
 	public:
 
 
-		/// тест реализации и использования интерфейса рисования
+		/// тест реализации и использования класса рисования
 		TEST_METHOD(Test_DrawableInterface){
-			Drawable tmp = BrokenCards::get_instance().get_drawable();
-			tmp.draw();
-			tmp = Card().get_drawable();
-			tmp.draw();
-			tmp = CardCouple::get_instance().get_drawable();
-			tmp.draw();
-			tmp = PackCards::get_instance().get_drawable();
-			tmp.draw();
-			tmp = Player::get_instance().get_drawable();
-			tmp.draw();
-			tmp = PlayingField::get_instance().get_drawable();
-			tmp.draw();
+			Draw::draw(BrokenCards::get_instance(), 0, 0);
+			Draw::draw(Card(), 0, 0);
+			Draw::draw(CardCouple(), 0, 0);
+			Draw::draw(PackCards::get_instance(), 0, 0);
+			Draw::draw(Player(), 0, 0);
+			Draw::draw(PlayingField::get_instance(), 0, 0);
+			Draw::draw(App::get_instance(), 0, 0);
+			Assert::IsTrue(true);
 		}
 
 		
