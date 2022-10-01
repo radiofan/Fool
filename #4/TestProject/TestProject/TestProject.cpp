@@ -14,8 +14,30 @@ namespace TestProject
 			App& game = App::get_instance();
 			Assert::IsTrue(true);
 		}
+
+		//логика игры GameLogic
+		/// тест реализации синглтона класса логики игры и доступа к игрокам
+		TEST_METHOD(Test_GameLogic__get_instance){
+			GameLogic& game_logic = GameLogic::get_instance();
+			try{
+				game_logic.get_player(0);
+				game_logic.get_player(1);
+				Assert::IsTrue(true);
+			}catch(...){
+				Assert::IsTrue(false);
+			}
+			try{
+				game_logic.get_player(2);
+				Assert::IsTrue(false);
+			}catch(...){
+				Assert::IsTrue(true);
+			}
+
+			Assert::IsTrue(true);
+		}
 		
 
+		//игрок Player
 		/// тест реализации класса игрока
 		TEST_METHOD(Test_Player){
 			Player player();
