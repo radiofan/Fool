@@ -65,9 +65,9 @@ namespace TestProject
 				}
 			}
 
-			for(int8_t i=all_cards.size()-1; i>=0; i--){
+			for(int8_t i=all_cards.size()-1, c=1; i>=0; i--, c++){
 				player.add(&all_cards[i]);
-				Assert::AreEqual((uint8_t)(i+1), player.count());
+				Assert::AreEqual((uint8_t)(c), player.count());
 			}
 			for(uint8_t i=0; i<all_cards.size(); i++){
 				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
@@ -85,15 +85,15 @@ namespace TestProject
 				Assert::IsTrue(true);
 			}
 
-			std::vector<Card> all_cards(36);
+			std::vector<Card*> all_cards(36);
 			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
 				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
-					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+					all_cards[card_ind] = new Card(card_cost, (CardSuit)card_suit);
 				}
 			}
 
 			for(int8_t i=all_cards.size()-1; i>=0; i--){
-				player.add(&all_cards[i]);
+				player.add(all_cards[i]);
 			}
 
 			
@@ -104,29 +104,39 @@ namespace TestProject
 				Assert::IsTrue(true);
 			}
 
-			Assert::IsTrue(player.take_card(0) == &all_cards[0]);
+			Card* tmp = nullptr;
+
+			tmp = player.take_card(0);
+			Assert::IsTrue(tmp == all_cards[0]);
 			all_cards.erase(all_cards.begin() + 0);
+			delete tmp;
 			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+				Assert::IsTrue(player.get_card(i) == all_cards[i]);
 			}
-
-			Assert::IsTrue(player.take_card(34) == &all_cards[34]);
+			
+			tmp = player.take_card(34);
+			Assert::IsTrue(tmp == all_cards[34]);
 			all_cards.erase(all_cards.begin() + 34);
+			delete tmp;
 			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+				Assert::IsTrue(player.get_card(i) == all_cards[i]);
 			}
-
-			Assert::IsTrue(player.take_card(16) == &all_cards[16]);
+			
+			tmp = player.take_card(16);
+			Assert::IsTrue(tmp == all_cards[16]);
 			all_cards.erase(all_cards.begin() + 16);
+			delete tmp;
 			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+				Assert::IsTrue(player.get_card(i) == all_cards[i]);
 			}
 
 			while(all_cards.size()){
-				Assert::IsTrue(player.take_card(0) == &all_cards[0]);
+				tmp = player.take_card(0);
+				Assert::IsTrue(tmp == all_cards[0]);
 				all_cards.erase(all_cards.begin() + 0);
+				delete tmp;
 				for(uint8_t i=0; i<all_cards.size(); i++){
-					Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+					Assert::IsTrue(player.get_card(i) == all_cards[i]);
 				}
 			}
 
@@ -143,7 +153,7 @@ namespace TestProject
 		/// тест конструктора всех карт
 		TEST_METHOD(Test_Card_Construct){
 			for(uint8_t cost=2; cost<=14; cost++){
-				for(int card_suit=1; card_suit <= Spade; card_suit++){
+				for(int card_suit=1; card_suit <= (int)CardSuit::Spade; card_suit++){
 					try{
 						Card card(cost, (CardSuit)card_suit);//конструктор с невыходящими за пределы свойствами не будет выкидывать исключение
 						Assert::IsTrue(true);
@@ -153,7 +163,7 @@ namespace TestProject
 				}
 			}
 			for(uint8_t cost=15; cost != 2; cost++){
-				for(int card_suit=1; card_suit <= Spade+1; card_suit++){
+				for(int card_suit=1; card_suit <= (int)CardSuit::Spade+1; card_suit++){
 					try{
 						Card card(cost, (CardSuit)card_suit);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
 						Assert::IsTrue(false);
@@ -164,13 +174,13 @@ namespace TestProject
 			}
 			for(uint8_t cost=2; cost<=14; cost++){
 				try{
-					Card card(cost, (CardSuit)(Spade+1));//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+					Card card(cost, (CardSuit)((int)CardSuit::Spade+1));//конструктор с выходящими за пределы свойствами будет выкидывать исключение
 					Assert::IsTrue(false);
 				}catch(...){
 					Assert::IsTrue(true);
 				}
 				try{
-					Card card(cost, None);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
+					Card card(cost, CardSuit::None);//конструктор с выходящими за пределы свойствами будет выкидывать исключение
 					Assert::IsTrue(false);
 				}catch(...){
 					Assert::IsTrue(true);
@@ -180,9 +190,9 @@ namespace TestProject
 		
 		/// тест геттеров карты
 		TEST_METHOD(Test_Card__getters){
-			Card card(5, Spade);
+			Card card(5, CardSuit::Spade);
 			Assert::AreEqual((uint8_t)5, card.get_cost());
-			Assert::AreEqual((int)Spade, (int)card.get_suit());
+			Assert::AreEqual((int)CardSuit::Spade, (int)card.get_suit());
 		}
 		
 		//поле игры PlayingField
@@ -272,7 +282,7 @@ namespace TestProject
 			Assert::IsNull(card_couple.get_defense()); 
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 			
-			Card card_1(5, Diamond);
+			Card card_1(5, CardSuit::Diamond);
 			Assert::IsFalse(card_couple.set_defense(&card_1)); //нельзя установить защитную карту без атакующей
 			Assert::IsTrue(card_couple.set_attack(&card_1));
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
@@ -283,17 +293,17 @@ namespace TestProject
 
 
 
-			Card card_2(4, Diamond);
+			Card card_2(4, CardSuit::Diamond);
 			Assert::IsFalse(card_couple.set_defense(&card_2)); //нельзя установить защитную карту слабже атакующей
-			Assert::IsFalse(card_couple.set_defense(&card_1, Diamond)); //нельзя установить защитную карту равной атакующей (даже если они козыри)
+			Assert::IsFalse(card_couple.set_defense(&card_1, CardSuit::Diamond)); //нельзя установить защитную карту равной атакующей (даже если они козыри)
 
 			//Card card_2(4, Diamond);
-			Assert::IsFalse(card_couple.set_defense(&card_2, Diamond)); //нельзя установить защитную карту слабже атакующей (даже если они козыри)
+			Assert::IsFalse(card_couple.set_defense(&card_2, CardSuit::Diamond)); //нельзя установить защитную карту слабже атакующей (даже если они козыри)
 			
-			Card card_3(6, Heart);
+			Card card_3(6, CardSuit::Heart);
 			Assert::IsFalse(card_couple.set_defense(&card_3)); //нельзя установить защитную карту другой масти (если она не козырь)
 			
-			Card card_4(6, Diamond);
+			Card card_4(6, CardSuit::Diamond);
 			Assert::IsTrue(card_couple.set_defense(&card_4)); //можно установить защитную карту выше по рангу
 			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
 
@@ -307,12 +317,12 @@ namespace TestProject
 			CardCouple card_couple = CardCouple();
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 
-			Card card_1(5, Diamond);
+			Card card_1(5, CardSuit::Diamond);
 			Assert::IsTrue(card_couple.set_attack(&card_1));
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 			
-			Card card_4(6, Diamond);
-			Assert::IsTrue(card_couple.set_defense(&card_4, Diamond)); //можно установить защитную карту выше по рангу (даже если они козыри)
+			Card card_4(6, CardSuit::Diamond);
+			Assert::IsTrue(card_couple.set_defense(&card_4, CardSuit::Diamond)); //можно установить защитную карту выше по рангу (даже если они козыри)
 			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
 
 			Assert::IsTrue(&card_4 == card_couple.get_defense());
@@ -323,12 +333,12 @@ namespace TestProject
 			CardCouple card_couple = CardCouple();
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 
-			Card card_1(5, Diamond);
+			Card card_1(5, CardSuit::Diamond);
 			Assert::IsTrue(card_couple.set_attack(&card_1));
 			Assert::IsFalse(card_couple.is_broken()); //является ли пара битой
 			
-			Card card_5(4, Heart);
-			Assert::IsTrue(card_couple.set_defense(&card_5, Heart)); //можно установить защитную карту ниже по рангу но козырь
+			Card card_5(4, CardSuit::Heart);
+			Assert::IsTrue(card_couple.set_defense(&card_5, CardSuit::Heart)); //можно установить защитную карту ниже по рангу но козырь
 			Assert::IsTrue(card_couple.is_broken()); //является ли пара битой
 
 			Assert::IsTrue(&card_5 == card_couple.get_defense());

@@ -10,6 +10,7 @@ enum class PlayerType{
 class Player{
 	private:
 		PlayerType type;
+		std::vector<Card*> cards;
 
 	public:
 		Player()	:	type(PlayerType::None){}
@@ -25,7 +26,44 @@ class Player{
 		}
 
 		uint8_t count(){
-			//todo расширить
-			return 0;
+			return cards.size();
+		}
+
+		void add(Card* card){
+			uint8_t L = 0,
+					R = cards.size(),
+					ind = L + (R - L) / 2,
+					diff;
+ 
+			while(L != R){
+				ind = L + (R - L) / 2;
+				/*
+				diff = card->get_cost() + (int)card->get_suit() * ((int)CardSuit::Spade+1)
+					 - cards[ind]->get_cost() + (int)cards[ind]->get_suit() * ((int)CardSuit::Spade+1);
+					 */
+				diff = card - cards[ind];//сортируем по указателям
+				if(diff <= 0){
+					L = ind + 1;
+				}else{
+					R = ind;
+				}
+			}
+			cards.insert(cards.begin()+L, card);
+		}
+
+		Card* get_card(uint8_t ind){
+			if(ind >= cards.size())
+				throw L"ind out of range";
+
+			return cards[ind];
+		}
+
+		Card* take_card(uint8_t ind){
+			if(ind >= cards.size())
+				throw L"ind out of range";
+
+			Card* ret = cards[ind];
+			cards.erase(cards.begin() + ind);
+			return ret;
 		}
 };

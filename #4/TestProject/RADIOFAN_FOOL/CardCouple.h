@@ -20,7 +20,7 @@ class CardCouple{
 			return true;
 		}
 
-		bool set_defense(Card* Defense, CardSuit Trump_card = None){
+		bool set_defense(Card* Defense, CardSuit Trump_card = CardSuit::None){
 			if(defense)
 				return false;
 			if(can_set_defense(Defense, Trump_card)){
@@ -34,7 +34,7 @@ class CardCouple{
 			return !!defense;
 		}
 
-		bool can_set_defense(Card* Defense, CardSuit Trump_card = None){
+		bool can_set_defense(Card* Defense, CardSuit Trump_card = CardSuit::None){
 			if(!attack)
 				return false;								//отсутсвует атакующая карта, нечего защищать
 
