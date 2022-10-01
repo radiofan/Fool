@@ -7,6 +7,7 @@
 #include "PackCards.h"
 #include "Player.h"
 #include "PlayingField.h"
+#include "GameLogic.h"
 
 class App{
 	private:
