@@ -95,6 +95,81 @@ namespace TestProject
 			Assert::AreEqual((uint8_t) 0, PlayingField::get_instance().count());
 		}
 		
+		/// тест реализации метода выбора первого игрока класса логики игры
+		TEST_METHOD(Test_GameLogic__get_first_player){
+			GameLogic& game_logic = GameLogic::get_instance();
+			game_logic.reset();
+			
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			for(uint8_t i=0; i<6; i++){
+				game_logic.get_player(0)->add(&all_cards[i]);
+				game_logic.get_player(1)->add(&all_cards[9+i]);
+			}
+			for(uint8_t i=0; i<50; i++){
+				uint8_t ret = game_logic.get_first_player();		//козырь не определен
+				if(ret){											//первый игрок рандомный
+					Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::MAIN_ATTACKER);
+					Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::DEFENDER);
+				}else{
+					Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::MAIN_ATTACKER);
+					Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::DEFENDER);
+				}
+				
+			}
+
+			while((int)(PackCards::get_instance().set_trump()->get_suit()) <= 2); //устанавливаем козырь отсутствующий в картах игроков
+			
+			for(uint8_t i=0; i<50; i++){
+				uint8_t ret = game_logic.get_first_player();		//козырь отсутствует
+				if(ret){											//первый игрок рандомный
+					Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::MAIN_ATTACKER);
+					Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::DEFENDER);
+				}else{
+					Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::MAIN_ATTACKER);
+					Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::DEFENDER);
+				}
+			}
+
+			while((int)(PackCards::get_instance().set_trump()->get_suit()) != 1); //устанавливаем козырь первого игрока
+			Assert::AreEqual((uint8_t) 0, game_logic.get_first_player());
+			Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::MAIN_ATTACKER);
+			Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::DEFENDER);
+
+			while((int)(PackCards::get_instance().set_trump()->get_suit()) != 2); //устанавливаем козырь второго игрока
+			Assert::AreEqual((uint8_t) 1, game_logic.get_first_player());
+			Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::MAIN_ATTACKER);
+			Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::DEFENDER);
+
+			for(uint8_t i=0; i<6; i++){
+				game_logic.get_player(0)->take_card(0);
+				game_logic.get_player(1)->take_card(0);
+			}
+			game_logic.get_player(0)->add(&all_cards[0]);
+			game_logic.get_player(0)->add(&all_cards[5]);
+			game_logic.get_player(0)->add(&all_cards[29]);
+			game_logic.get_player(0)->add(&all_cards[20]);
+			game_logic.get_player(0)->add(&all_cards[11]);//козырь
+			game_logic.get_player(0)->add(&all_cards[2]);
+
+			game_logic.get_player(1)->add(&all_cards[1]);
+			game_logic.get_player(1)->add(&all_cards[10]);//козырь
+			game_logic.get_player(1)->add(&all_cards[30]);
+			game_logic.get_player(1)->add(&all_cards[14]);//козырь
+			game_logic.get_player(1)->add(&all_cards[15]);
+			game_logic.get_player(1)->add(&all_cards[31]);
+
+			
+			Assert::AreEqual((uint8_t) 1, game_logic.get_first_player());//первый игрок имеет младший козырь
+			Assert::IsTrue(game_logic.get_player(1)->get_type() == PlayerType::MAIN_ATTACKER);
+			Assert::IsTrue(game_logic.get_player(0)->get_type() == PlayerType::DEFENDER);
+		}
+		
 
 		//игрок Player
 		/// тест реализации класса игрока
