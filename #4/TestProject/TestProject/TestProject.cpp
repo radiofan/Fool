@@ -73,6 +73,65 @@ namespace TestProject
 				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
 			}
 		}
+
+		/// тест реализации метода взятия карты у игрока игрока класса игрока
+		TEST_METHOD(Test_Player_take_card){
+			Player player = Player();
+
+			try{
+				player.take_card(0);
+				Assert::IsTrue(false);
+			}catch(...){
+				Assert::IsTrue(true);
+			}
+
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			for(int8_t i=all_cards.size()-1; i>=0; i--){
+				player.add(&all_cards[i]);
+			}
+
+			
+			try{
+				player.take_card(36);
+				Assert::IsTrue(false);
+			}catch(...){
+				Assert::IsTrue(true);
+			}
+
+			Assert::IsTrue(player.take_card(0) == &all_cards[0]);
+			all_cards.erase(all_cards.begin() + 0);
+			for(uint8_t i=0; i<all_cards.size(); i++){
+				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+			}
+
+			Assert::IsTrue(player.take_card(34) == &all_cards[34]);
+			all_cards.erase(all_cards.begin() + 34);
+			for(uint8_t i=0; i<all_cards.size(); i++){
+				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+			}
+
+			Assert::IsTrue(player.take_card(16) == &all_cards[16]);
+			all_cards.erase(all_cards.begin() + 16);
+			for(uint8_t i=0; i<all_cards.size(); i++){
+				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+			}
+
+			while(all_cards.size()){
+				Assert::IsTrue(player.take_card(0) == &all_cards[0]);
+				all_cards.erase(all_cards.begin() + 0);
+				for(uint8_t i=0; i<all_cards.size(); i++){
+					Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+				}
+			}
+
+			Assert::AreEqual((uint8_t)0, player.count());
+		}
 		
 		//карта Card
 		/// тест реализации класса карты
