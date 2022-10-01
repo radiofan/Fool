@@ -56,9 +56,22 @@ namespace TestProject
 		/// тест реализации методов работы с картами игрока класса игрока
 		TEST_METHOD(Test_Player_add_cards){
 			Player player = Player();
-
 			Assert::AreEqual((uint8_t)0, player.count());
-			//todo расширить методы работы с картами икрока
+			
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			for(int8_t i=all_cards.size()-1; i>=0; i--){
+				player.add(&all_cards[i]);
+				Assert::AreEqual((uint8_t)(i+1), player.count());
+			}
+			for(uint8_t i=0; i<all_cards.size(); i++){
+				Assert::IsTrue(player.get_card(i) == &all_cards[i]);
+			}
 		}
 		
 		//карта Card
@@ -113,7 +126,7 @@ namespace TestProject
 			Assert::AreEqual((int)Spade, (int)card.get_suit());
 		}
 		
-
+		//поле игры PlayingField
 		/// тест реализации синглтона класса поля игры
 		TEST_METHOD(Test_PlayingField){
 			PlayingField& playing_field = PlayingField::get_instance();
