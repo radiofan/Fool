@@ -22,7 +22,7 @@ namespace TestProject
 			Assert::IsTrue(true);
 		}
 		
-
+		//карта Card
 		/// тест реализации класса карты
 		TEST_METHOD(Test_Card){
 			Card card();
@@ -108,8 +108,34 @@ namespace TestProject
 
 			}
 		}
-		
 
+		/// тест реализации метода проверки битости всех пар карт класса поля игры
+		TEST_METHOD(Test_PlayingField_is_all_card_couples_broken){
+			std::vector<Card> all_cards(36);
+			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
+				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
+				}
+			}
+
+			PlayingField& playing_field = PlayingField::get_instance();
+			playing_field.reset();
+
+			Assert::IsTrue(playing_field.is_all_card_couples_broken());
+			
+			for(uint8_t i=0; i<playing_field.MAX_CARD_COUPLES; i++){
+				CardCouple tmp = CardCouple();
+				playing_field.add_card_couple(tmp);
+				Assert::IsFalse(playing_field.is_all_card_couples_broken());
+
+				playing_field.get_card_couple(0).set_attack(&all_cards[0]);
+				Assert::IsFalse(playing_field.is_all_card_couples_broken());
+				playing_field.get_card_couple(0).set_defense(&all_cards[1]);
+				Assert::IsTrue(playing_field.is_all_card_couples_broken());
+			}
+		}
+		
+		//пара карт CardCouple
 		/// тест реализации класса пары карт
 		TEST_METHOD(Test_CardCouple){
 			CardCouple card_couple();
@@ -185,7 +211,7 @@ namespace TestProject
 			Assert::IsTrue(&card_5 == card_couple.get_defense());
 		}
 		
-
+		//битые карты BrokenCards
 		/// тест реализации синглтона класса битых карт
 		TEST_METHOD(Test_BrokenCards){
 			BrokenCards& broken_cards = BrokenCards::get_instance();
@@ -219,7 +245,7 @@ namespace TestProject
 			Assert::AreEqual((uint8_t)36, broken_cards.count());
 		}
 		
-
+		//колода PackCards
 		/// тест реализации синглтона класса колоды карт
 		TEST_METHOD(Test_PackCards){
 			PackCards& pack_cards = PackCards::get_instance();
@@ -287,7 +313,7 @@ namespace TestProject
 			Assert::AreEqual((size_t)0, all_cards.size());
 		}
 		
-
+		//конвертор CostConvertor
 		/// тест реализации класса конвертора стоимости карты
 		TEST_METHOD(Test_CostConvertor){
 			CostConvertor cost_convertor();
