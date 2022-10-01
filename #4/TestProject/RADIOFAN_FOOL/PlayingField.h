@@ -32,6 +32,15 @@ class PlayingField_defenition{
 
 			return card_couples[ind];
 		}
+
+		bool is_all_card_couples_broken(){
+			for(uint8_t i=0; i<card_couples.size(); i++){
+				if(!card_couples[i].is_broken())
+					return false;
+			}
+			
+			return true;
+		}
 };
 
 class PlayingField : public PlayingField_defenition{

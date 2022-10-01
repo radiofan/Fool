@@ -128,9 +128,9 @@ namespace TestProject
 				playing_field.add_card_couple(tmp);
 				Assert::IsFalse(playing_field.is_all_card_couples_broken());
 
-				playing_field.get_card_couple(0).set_attack(&all_cards[0]);
+				playing_field.get_card_couple(i).set_attack(&all_cards[0]);
 				Assert::IsFalse(playing_field.is_all_card_couples_broken());
-				playing_field.get_card_couple(0).set_defense(&all_cards[1]);
+				playing_field.get_card_couple(i).set_defense(&all_cards[1]);
 				Assert::IsTrue(playing_field.is_all_card_couples_broken());
 			}
 		}
