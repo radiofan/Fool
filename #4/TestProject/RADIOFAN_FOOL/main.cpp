@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "App.h"
 
 const wchar_t CostConvertor::cost_to_letter[] = {L'0', L'В', L'Д', L'К', L'Т'};

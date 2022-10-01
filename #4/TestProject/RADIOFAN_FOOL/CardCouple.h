@@ -31,7 +31,7 @@ class CardCouple{
 		}
 
 		bool is_broken(){
-			return !defense;
+			return !!defense;
 		}
 
 		bool can_set_defense(Card* Defense, CardSuit Trump_card = None){

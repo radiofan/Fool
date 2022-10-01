@@ -1,27 +1,13 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 const wchar_t CostConvertor::cost_to_letter[] = {L'0', L'В', L'Д', L'К', L'Т'};
 
-TEST_MODULE_INITIALIZE(ModuleInitialize)
+namespace TestProject
 {
-	Logger::WriteMessage(L"In Module Initialize");
-}
-
-
-TEST_CLASS(RADIOFAN_FOOL_Tester){
+	TEST_CLASS(TestProject){
 	public:
-		
-		TEST_METHOD_INITIALIZE(INIT_METHOD){
-			Logger::WriteMessage(L"RADIOFAN_FOOL_Tester Initialize");
-		}
-
-		/*
-		TEST_METHOD_CLEANUP(END_METHOD){
-
-		}
-		*/
 		
 		/// тест реализации синглтона класса приложения
 		TEST_METHOD(Test_App__get_instance){
@@ -308,18 +294,6 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::IsTrue(true);
 		}
 
-		/// тест реализации метода конвертации стоимости в букву
-		TEST_METHOD(Test_CostConvertor__cost2letter){
-			CostConvertor::cost2letter(0);
-			Assert::IsTrue(true);
-		}
-
-		/// тест реализации метода конвертации буквы в стоимость
-		TEST_METHOD(Test_CostConvertor__letter2cost){
-			CostConvertor::letter2cost(L'\0');
-			Assert::IsTrue(true);
-		}
-
 		/// тест правильной работы метода конвертации стоимости в букву
 		TEST_METHOD(Test_CostConvertor__cost2letter__work){
 			for(uint8_t i=15; i != 2; i++){
@@ -352,9 +326,5 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			Assert::AreEqual((uint8_t)13, CostConvertor::letter2cost(L'К'));
 			Assert::AreEqual((uint8_t)14, CostConvertor::letter2cost(L'Т'));
 		}
-
-
-
-
-
-};
+	};
+}

@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{27e964f7-2da0-486d-9013-731b917dd2ef}</ProjectGuid>
+    <ProjectGuid>{ecbaf604-4140-4154-ba71-0fa4e270426b}</ProjectGuid>
     <RootNamespace>RADIOFANFOOL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

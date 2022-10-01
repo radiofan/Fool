@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{D9BB1BCE-45A7-47DF-BBD7-36135EE7B5C4}</ProjectGuid>
+    <ProjectGuid>{99E3EF40-535D-4465-91FB-DD0601085733}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TestProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -77,11 +77,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\WORK\политех\3.2\тестирование\IVT9X\#4\TestProject\RADIOFAN_FOOL;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Мои документы\Проги\c++\TestProject\RADIOFAN_FOOL;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\WORK\политех\3.2\тестирование\IVT9X\#4\TestProject\RADIOFAN_FOOL;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -171,7 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RADIOFAN_FOOL\RADIOFAN_FOOL.vcxproj">
-      <Project>{27e964f7-2da0-486d-9013-731b917dd2ef}</Project>
+      <Project>{ecbaf604-4140-4154-ba71-0fa4e270426b}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
