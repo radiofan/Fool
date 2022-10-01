@@ -35,6 +35,8 @@ class App_defenition{
 
 			_current_player = -1;
 
+			srand(time(nullptr));
+
 			GameLogic::get_instance().reset();
 			//this->redraw();
 		}
@@ -71,7 +73,7 @@ class App_defenition{
 			Sleep(CARD_DISTRIBUTION_DELAY_MS);
 			PackCards::get_instance().set_trump();
 			//todo
-			//_current_player = game_logic.get_first_player();
+			_current_player = game_logic.get_first_player();
 			_current_player = 0;
 			_can_accept_move = true;
 			//this->redraw();

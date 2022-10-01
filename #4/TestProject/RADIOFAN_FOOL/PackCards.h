@@ -61,6 +61,12 @@ class PackCards_defenition{
 		Card* get_trump(){
 			return trump;
 		}
+
+		CardSuit get_trump_suit(){
+			if(trump)
+				return trump->get_suit();
+			return CardSuit::None;
+		}
 };
 
 
