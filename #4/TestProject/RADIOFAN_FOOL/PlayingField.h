@@ -45,6 +45,14 @@ class PlayingField_defenition{
 		bool can_add_card_couple(){
 			return card_couples.size() < MAX_CARD_COUPLES;
 		}
+
+		void move_cards_to_broken(){
+			BrokenCards& broken_cards = BrokenCards::get_instance();
+			for(uint8_t i=0; i<card_couples.size(); i++){
+				broken_cards.add(card_couples[i]);
+			}
+			this->reset();
+		}
 };
 
 class PlayingField : public PlayingField_defenition{

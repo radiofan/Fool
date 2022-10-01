@@ -37,7 +37,7 @@ namespace TestProject
 		}
 		
 		/// тест реализации метода сброса класса логики игры
-		TEST_METHOD(Test_GameLogic__get_instance){
+		TEST_METHOD(Test_GameLogic__reset){
 			GameLogic& game_logic = GameLogic::get_instance();
 			game_logic.reset();
 			Assert::AreEqual((uint8_t) 36, PackCards::get_instance().count());
@@ -279,7 +279,7 @@ namespace TestProject
 		}
 
 		/// тест реализации метода проверки битости всех пар карт класса поля игры
-		TEST_METHOD(Test_PlayingField_is_all_card_couples_broken){
+		TEST_METHOD(Test_PlayingField__is_all_card_couples_broken){
 			std::vector<Card> all_cards(36);
 			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
 				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
@@ -305,7 +305,7 @@ namespace TestProject
 		}
 
 		/// тест реализации метода проверки возможности добавить пару на поле карт класса поля игры
-		TEST_METHOD(Test_PlayingField_can_add_card_couple){
+		TEST_METHOD(Test_PlayingField__can_add_card_couple){
 			PlayingField& playing_field = PlayingField::get_instance();
 			playing_field.reset();
 			for(uint8_t i=0; i<playing_field.MAX_CARD_COUPLES; i++){
@@ -317,7 +317,7 @@ namespace TestProject
 		}
 
 		/// тест реализации метода отправки пар карт в биту класса поля игры
-		TEST_METHOD(Test_PlayingField_can_add_card_couple){
+		TEST_METHOD(Test_PlayingField__move_cards_to_broken){
 			PlayingField& playing_field = PlayingField::get_instance();
 
 			playing_field.reset();
