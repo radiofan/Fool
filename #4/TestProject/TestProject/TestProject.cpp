@@ -11,12 +11,13 @@ namespace TestProject
 
 
 		/// тест реализации и использования класса рисования
-		TEST_METHOD(Test_DrawableInterface){
+		TEST_METHOD(Test_Draw){
 			Draw::draw(BrokenCards::get_instance(), 0, 0);
 			Draw::draw(Card(), 0, 0);
 			Draw::draw(CardCouple(), 0, 0);
 			Draw::draw(PackCards::get_instance(), 0, 0);
-			Draw::draw(Player(), 0, 0);
+			Draw::draw(Player(), 0, 0, PlayerDrawType::HIDDEN);
+			Draw::draw(Player(), 0, 0, PlayerDrawType::CURRENT);
 			Draw::draw(PlayingField::get_instance(), 0, 0);
 			Draw::draw(App::get_instance(), 0, 0);
 			Assert::IsTrue(true);
@@ -27,6 +28,24 @@ namespace TestProject
 		TEST_METHOD(Test_App__get_instance){
 			App& game = App::get_instance();
 			Assert::IsTrue(true);
+		}
+
+		/// тест начала работы класса приложения
+		TEST_METHOD(Test_App__start){
+			App& game = App::get_instance();
+			game.reset();
+			Assert::IsFalse(game.can_accept_move());
+			Assert::IsFalse(game.can_accept_cards());
+			Assert::IsFalse(game.can_complete_action());
+			Assert::IsFalse(game.can_change_move());
+			Assert::AreEqual((int8_t) -1, game.current_player());
+			game.start();
+
+			Assert::IsTrue(game.can_accept_move());
+			Assert::IsFalse(game.can_accept_cards());
+			Assert::IsFalse(game.can_complete_action());
+			Assert::IsFalse(game.can_change_move());
+			Assert::IsTrue(game.current_player() == 0 || game.current_player() == 1);
 		}
 
 		//логика игры GameLogic
