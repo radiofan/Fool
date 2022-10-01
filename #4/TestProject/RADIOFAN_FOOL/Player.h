@@ -7,7 +7,7 @@ enum class PlayerType{
 	MAIN_ATTACKER
 };
 
-class Player{
+class Player : public NeedRedraw{
 	private:
 		PlayerType type;
 		std::vector<Card*> cards;
@@ -49,6 +49,7 @@ class Player{
 				}
 			}
 			cards.insert(cards.begin()+L, card);
+			this->need_redraw = true;
 		}
 
 		Card* get_card(uint8_t ind){
@@ -64,6 +65,7 @@ class Player{
 
 			Card* ret = cards[ind];
 			cards.erase(cards.begin() + ind);
+			this->need_redraw = true;
 			return ret;
 		}
 };

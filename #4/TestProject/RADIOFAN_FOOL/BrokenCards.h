@@ -1,6 +1,6 @@
 #pragma once
 
-class BrokenCards_defenition{
+class BrokenCards_defenition : public NeedRedraw{
 	private:
 		std::deque<Card*> broken_cards;
 
@@ -14,6 +14,7 @@ class BrokenCards_defenition{
 
 		void reset(){
 			broken_cards.clear();
+			this->need_redraw = true;
 		}
 
 		uint8_t count(){
@@ -21,10 +22,14 @@ class BrokenCards_defenition{
 		}
 
 		void add(CardCouple& card_couple){
-			if(card_couple.get_defense())
+			if(card_couple.get_defense()){
 				broken_cards.push_front(card_couple.get_defense());
-			if(card_couple.get_attack())
+				this->need_redraw = true;
+			}
+			if(card_couple.get_attack()){
 				broken_cards.push_front(card_couple.get_attack());
+				this->need_redraw = true;
+			}
 		}
 };
 

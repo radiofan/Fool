@@ -1,5 +1,5 @@
 #pragma once
-class PlayingField_defenition{
+class PlayingField_defenition : public NeedRedraw{
 	private:
 		std::vector<CardCouple> card_couples;
 
@@ -14,6 +14,7 @@ class PlayingField_defenition{
 
 		void reset(){
 			card_couples.clear();
+			this->need_redraw = true;
 		}
 
 		uint8_t count(){
@@ -24,12 +25,13 @@ class PlayingField_defenition{
 			if(card_couples.size() == MAX_CARD_COUPLES)
 				throw L"Count of card couples reached the limit";
 			card_couples.push_back(card_couple);
+			this->need_redraw = true;
 		}
 
 		CardCouple& get_card_couple(uint8_t ind){
 			if(ind >= card_couples.size())
 				throw L"ind out of range";
-
+			
 			return card_couples[ind];
 		}
 

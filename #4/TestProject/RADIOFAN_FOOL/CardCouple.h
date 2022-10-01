@@ -1,5 +1,5 @@
 #pragma once
-class CardCouple{
+class CardCouple : public NeedRedraw{
 	private:
 		Card* attack;
 		Card* defense;
@@ -17,6 +17,7 @@ class CardCouple{
 			if(attack)
 				return false;
 			attack = Attack;
+			need_redraw = true;
 			return true;
 		}
 
@@ -25,6 +26,7 @@ class CardCouple{
 				return false;
 			if(can_set_defense(Defense, Trump_card)){
 				defense = Defense;
+				need_redraw = true;
 				return true;
 			}
 			return false;

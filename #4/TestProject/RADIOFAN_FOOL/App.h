@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SColor.h";
+#include "set_coord.h"
 #include "Draw.h";
 #include "CostConvertor.h"
 #include "Card.h"
@@ -10,7 +12,7 @@
 #include "PlayingField.h"
 #include "GameLogic.h"
 
-class App_defenition{
+class App_defenition : public NeedRedraw{
 	private:
 		bool _can_accept_move;
 		bool _can_accept_cards;
@@ -28,17 +30,21 @@ class App_defenition{
 		const uint64_t CARD_DISTRIBUTION_DELAY_MS = 300;
 
 		void reset(){
+			Draw::draw();
+
 			_can_accept_move = false;
 			_can_accept_cards = false;
 			_can_complete_action = false;
 			_can_change_move = false;
 
 			_current_player = -1;
+			this->need_redraw = true;
 
 			srand(time(nullptr));
 
 			GameLogic::get_instance().reset();
-			//this->redraw();
+			
+			this->redraw();
 		}
 
 		bool can_accept_move(){
@@ -64,20 +70,57 @@ class App_defenition{
 				Sleep(CARD_DISTRIBUTION_DELAY_MS);
 				Card* card = PackCards::get_instance().pop();
 				game_logic.get_player(0)->add(card);
-				//this->redraw();
+				this->redraw();
 				Sleep(CARD_DISTRIBUTION_DELAY_MS);
 				card = PackCards::get_instance().pop();
 				game_logic.get_player(1)->add(card);
-				//this->redraw();
+				this->redraw();
 			}
 			Sleep(CARD_DISTRIBUTION_DELAY_MS);
 			PackCards::get_instance().set_trump();
-			//todo
+
 			_current_player = game_logic.get_first_player();
 			_current_player = 0;
 			_can_accept_move = true;
-			//this->redraw();
+			this->need_redraw = true;
+
+			this->redraw();
+			//todo
 			//this->wait_events();
+		}
+
+		void redraw(){
+			if(this->need_redraw){
+				Draw::draw(*this, 0, 0);
+			}
+
+			if(_current_player == -1){
+				Player tmp;
+				Draw::draw(tmp, 0, 4, PlayerDrawType::HIDDEN);
+			}else{
+				Player* tmp = GameLogic::get_instance().get_player(_current_player^0x01);
+				if(tmp->is_need_redraw()){
+					Draw::draw(*tmp, 0, 4, PlayerDrawType::HIDDEN);
+				}
+			}
+			if(BrokenCards::get_instance().is_need_redraw()){
+				Draw::draw(BrokenCards::get_instance(), 4, 14);
+			}
+			if(PlayingField::get_instance().is_need_redraw()){
+				Draw::draw(PlayingField::get_instance(), 20, 13);
+			}
+			if(PackCards::get_instance().is_need_redraw()){
+				Draw::draw(PackCards::get_instance(), 66, 14);
+			}
+			if(_current_player == -1){
+				Player tmp;
+				Draw::draw(tmp, 0, 24, PlayerDrawType::CURRENT_HIDDEN);
+			}else{
+				Player* tmp = GameLogic::get_instance().get_player(_current_player);
+				if(tmp->is_need_redraw()){
+					Draw::draw(*tmp, 0, 24, tmp->get_type() == PlayerType::None ? PlayerDrawType::CURRENT_HIDDEN : PlayerDrawType::CURRENT_OPEN);
+				}
+			}
 		}
 };
 

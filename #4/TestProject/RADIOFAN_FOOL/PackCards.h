@@ -1,6 +1,6 @@
 #pragma once
 
-class PackCards_defenition{
+class PackCards_defenition : public NeedRedraw{
 	private:
 		Card all_cards[36];
 		std::deque<Card*> pack_cards;
@@ -31,6 +31,8 @@ class PackCards_defenition{
 				pack_cards.push_front(&(all_cards[indexes[i]]));
 			}
 
+			this->need_redraw = true;
+
 			trump = nullptr;
 		}
 
@@ -40,6 +42,7 @@ class PackCards_defenition{
 
 			Card* ret = pack_cards.front();
 			pack_cards.pop_front();
+			this->need_redraw = true;
 			return ret;
 		}
 
@@ -55,6 +58,7 @@ class PackCards_defenition{
 			pack_cards.pop_front();
 			pack_cards.push_back(ret);
 			trump = ret;
+			this->need_redraw = true;
 			return ret;
 		}
 
