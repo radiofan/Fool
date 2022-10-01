@@ -100,6 +100,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 			PlayingField& playing_field = PlayingField::get_instance();
 			playing_field.reset();
 			
+			CardCouple tmp = CardCouple();
 
 			for(uint8_t couple_i = 0; couple_i <= 6; couple_i++){
 				Assert::AreEqual(couple_i, playing_field.count());
@@ -113,7 +114,7 @@ TEST_CLASS(RADIOFAN_FOOL_Tester){
 					}
 				}
 				try{
-					playing_field.add_card_couple(CardCouple());
+					playing_field.add_card_couple(tmp);
 					Assert::IsTrue(couple_i < 6);
 				}catch(...){
 					Assert::IsFalse(couple_i < 6);
