@@ -25,27 +25,27 @@ namespace TestProject
 		// тест реализации PlayerType
 		TEST_METHOD(Test_Player__enum_PlayerType){
 			PlayerType tmp = (PlayerType)0;
-			Assert::AreEqual((int)None, (int)tmp);
+			Assert::AreEqual((int)PlayerType::None, (int)tmp);
 			
 			tmp = (PlayerType)1;
-			Assert::AreEqual((int)ATTACKER, (int)tmp);
+			Assert::AreEqual((int)PlayerType::ATTACKER, (int)tmp);
 			tmp = (PlayerType)2;
-			Assert::AreEqual((int)DEFENDER, (int)tmp);
+			Assert::AreEqual((int)PlayerType::DEFENDER, (int)tmp);
 			tmp = (PlayerType)3;
-			Assert::AreEqual((int)MAIN_ATTACKER, (int)tmp);
+			Assert::AreEqual((int)PlayerType::MAIN_ATTACKER, (int)tmp);
 		}
 
 		/// тест реализации методов работы с типом игрока класса игрока
 		TEST_METHOD(Test_Player_type){
-			Player player();
+			Player player = Player();
 
-			Assert::AreEqual((int)None, (int)player.get_type());
-			for(uint8_t i=1; i<=(int)MAIN_ATTACKER; i++){
+			Assert::AreEqual((int)PlayerType::None, (int)player.get_type());
+			for(uint8_t i=1; i<=(int)PlayerType::MAIN_ATTACKER; i++){
 				player.set_type((PlayerType)i);
-				Assert::AreEqual(i, (int)player.get_type());
+				Assert::AreEqual((int)i, (int)player.get_type());
 			}
 			try{
-				player.set_type((PlayerType)(MAIN_ATTACKER+1));
+				player.set_type((PlayerType)((int)(PlayerType::MAIN_ATTACKER)+1));
 				Assert::Fail();
 			}catch(...){
 				Assert::IsTrue(true);
@@ -55,9 +55,9 @@ namespace TestProject
 
 		/// тест реализации методов работы с картами игрока класса игрока
 		TEST_METHOD(Test_Player_add_cards){
-			Player player();
+			Player player = Player();
 
-			Assert::AreEqual(0, player.count());
+			Assert::AreEqual((uint8_t)0, player.count());
 			//todo расширить методы работы с картами икрока
 		}
 		

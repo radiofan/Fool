@@ -41,6 +41,10 @@ class PlayingField_defenition{
 			
 			return true;
 		}
+
+		bool can_add_card_couple(){
+			return card_couples.size() < MAX_CARD_COUPLES;
+		}
 };
 
 class PlayingField : public PlayingField_defenition{
