@@ -32,8 +32,8 @@ class Player : public NeedRedraw{
 		void add(Card* card){
 			uint8_t L = 0,
 					R = cards.size(),
-					ind = L + (R - L) / 2,
-					diff;
+					ind = L + (R - L) / 2;
+			int32_t diff;
  
 			while(L != R){
 				ind = L + (R - L) / 2;
@@ -41,8 +41,8 @@ class Player : public NeedRedraw{
 				diff = card->get_cost() + (int)card->get_suit() * ((int)CardSuit::Spade+1)
 					 - cards[ind]->get_cost() + (int)cards[ind]->get_suit() * ((int)CardSuit::Spade+1);
 					 */
-				diff = card - cards[ind];//сортируем по указателям
-				if(diff <= 0){
+				diff = (int64_t)card - (int64_t)cards[ind];//сортируем по указателям
+				if(diff > 0){
 					L = ind + 1;
 				}else{
 					R = ind;
