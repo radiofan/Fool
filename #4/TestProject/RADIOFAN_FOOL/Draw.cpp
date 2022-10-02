@@ -297,6 +297,12 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 
 	if(app.current_couple() != -1 && app.card_in_hand()){
 		int16_t tmp_x = app.current_couple() * 8;
+		if(app.current_player()->get_type() == PlayerType::DEFENDER){
+			Draw::draw(
+				*(PlayingField::get_instance().get_card_couple(app.current_couple()).get_attack()),
+				tmp_x+16, 13, CardDrawType::SHADDOW
+			);//костыль
+		}
 		Draw::draw(*(app.card_in_hand()), tmp_x+16, 15);
 		if(app.current_player()->get_type() != PlayerType::DEFENDER){
 			fill(tmp_x+16, 14, 6, 1, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'▒');

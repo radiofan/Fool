@@ -77,12 +77,20 @@ class PlayingField_defenition : public NeedRedraw{
 		}
 
 		int8_t get_right_not_broken_couple(int8_t ind){
-			if(ind >= card_couples.size() || ind < 0)
+			if(ind >= card_couples.size()-1 || ind < 0)
 				ind = -1;
 			int8_t ret = -1;
-			for(ind++; ind<card_couples.size(); ind++){
-				if(!card_couples[ind].is_broken()){
-					ret = ind;
+			for(int8_t start = ind+1; start<card_couples.size(); start++){
+				if(!card_couples[start].is_broken()){
+					ret = start;
+					break;
+				}
+			}
+			if(ret != -1)
+				return ret;
+			for(int8_t start = 0; start<=ind; start++){
+				if(!card_couples[start].is_broken()){
+					ret = start;
 					break;
 				}
 			}
@@ -90,19 +98,28 @@ class PlayingField_defenition : public NeedRedraw{
 		}
 
 		int8_t get_left_not_broken_couple(int8_t ind){
-			if(ind >= card_couples.size() || ind < 0)
+			if(ind >= card_couples.size() || ind <= 0)
 				ind = card_couples.size();
 			int8_t ret = -1;
-			for(ind--; ind >= 0; ind--){
-				if(!card_couples[ind].is_broken()){
-					ret = ind;
+			for(int8_t end = ind-1; end>=0; end--){
+				if(!card_couples[end].is_broken()){
+					ret = end;
+					break;
+				}
+			}
+			if(ret != -1)
+				return ret;
+			for(int8_t end = card_couples.size()-1; end>=ind; end--){
+				if(!card_couples[end].is_broken()){
+					ret = end;
 					break;
 				}
 			}
 			return ret;
 		}
 
-		void set_need_redraw(){
+		void set_need_redraw_couple(int8_t ind){
+			get_card_couple(ind).set_need_redraw();
 			need_redraw = true;
 		}
 };

@@ -134,12 +134,8 @@ class App_defenition : public NeedRedraw{
 		}
 
 		void accept_move(){
-			//todo проверка на то что на столе есть карты, главный атакующий, все карты биты
-			//можно завершить кон
-
 			if(!_can_accept_move)
 				return;
-
 			
 			_can_accept_move = false;
 			_can_accept_cards = false;
@@ -172,7 +168,30 @@ class App_defenition : public NeedRedraw{
 
 		void accept_cards(){}//todo
 
-		void change_move(){}//todo
+		void change_move(){
+			if(!_can_change_move)
+				return;
+
+			if(_card_in_hand){
+				_current_player->add(_card_in_hand);
+			}
+			
+			_can_accept_move = true;
+			_can_accept_cards = false;
+			_can_complete_action = false;
+			_can_change_move = false;
+			
+			_card_in_hand = nullptr;
+			_current_card = -1;
+			_current_couple = -1;
+
+			uint8_t tmp = current_player_ind();
+			_current_player->set_type(_current_player->get_type());
+			_current_player = GameLogic::get_instance().get_player(tmp ^ 0x01);
+			_current_player->set_type(_current_player->get_type());
+
+			need_redraw = true;
+		}
 
 		bool card_shift(int32_t shift){
 
@@ -190,9 +209,9 @@ class App_defenition : public NeedRedraw{
 				if(shift == _current_couple){
 					return false;
 				}else{
+					playing_field.set_need_redraw_couple(_current_couple);
 					_current_couple = shift;
 					need_redraw = true;
-					playing_field.set_need_redraw();
 					return true;
 				}
 			}
@@ -258,10 +277,11 @@ class App_defenition : public NeedRedraw{
 					//защищающийся
 					CardCouple& tmp = palying_field.get_card_couple(_current_couple);;
 					if(tmp.set_defense(_card_in_hand, PackCards::get_instance().get_trump_suit())){
-						if(palying_field.is_all_card_couples_broken()){
-							_can_change_move = true;
-							_can_accept_cards = false;
-						}
+						PlayingField::get_instance().set_need_redraw_couple(_current_couple);
+						_can_change_move = true;
+						_can_accept_cards = false;
+					}else{
+						return false;
 					}
 				}
 				_current_couple = -1;
@@ -281,12 +301,15 @@ class App_defenition : public NeedRedraw{
 			if(!_card_in_hand)
 				return false;
 
+			if(_current_player->get_type() == PlayerType::DEFENDER){
+				PlayingField::get_instance().set_need_redraw_couple(_current_couple);
+			}
+
 			_current_player->add(_card_in_hand);
 			_card_in_hand = nullptr;
 			_current_card = 0;
 			_current_couple = -1;
 
-			PlayingField::get_instance().set_need_redraw();
 			need_redraw = true;
 		}
 

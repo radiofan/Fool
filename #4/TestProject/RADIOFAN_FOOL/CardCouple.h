@@ -52,4 +52,8 @@ class CardCouple : public NeedRedraw{
 
 			return false;									//во всех других случаях не бьем
 		}
+
+		void set_need_redraw(){
+			need_redraw = true;
+		}
 };
