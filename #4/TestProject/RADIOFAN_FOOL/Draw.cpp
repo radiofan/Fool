@@ -267,15 +267,15 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 	std::wcout << set_coord(37, 1) << SColor(app.can_change_move() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
 			   << L"3" << set_coord(39, 1) << L" передать ход";
 
-	std::wcout << set_coord(54, 1) << SColor(app.current_player() == -1 ? BackColor::CYAN_DARK : (app.current_player() == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK), TextColor::GRAY)
+	std::wcout << set_coord(54, 1) << SColor(app.current_player_ind() == -1 ? BackColor::CYAN_DARK : (app.current_player_ind() == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK), TextColor::GRAY)
 			   << L" ход икрока ";;
-	if(app.current_player() == -1){
+	if(app.current_player_ind() == -1){
 		std::wcout << L"  "
 				   << set_coord(69, 1) << L"        ";
 	}else{
-		std::wcout << (app.current_player()+1) << L' '
+		std::wcout << (app.current_player_ind()+1) << L' '
 				   << set_coord(69, 1) << SColor(BackColor::CYAN_DARK, TextColor::GRAY);
-		PlayerType tmp = GameLogic::get_instance().get_player(app.current_player())->get_type();
+		PlayerType tmp = app.current_player()->get_type();
 		if(tmp == PlayerType::ATTACKER || tmp == PlayerType::MAIN_ATTACKER){
 			std::wcout << L" атака  ";
 		}else if(tmp == PlayerType::DEFENDER){

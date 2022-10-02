@@ -14,9 +14,11 @@ std::wostream& operator<<(std::wostream& os, const set_coord& tmp){
 }
 
 int32_t wmain(int32_t argc, wchar_t* argv[]){
+
+
 	
 	App::get_instance().start();
 
-	_getch();
+	//char a = _getch();
 	return 0;
 }

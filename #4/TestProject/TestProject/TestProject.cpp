@@ -31,7 +31,7 @@ namespace TestProject
 			Assert::IsFalse(game.can_accept_cards());
 			Assert::IsFalse(game.can_complete_action());
 			Assert::IsFalse(game.can_change_move());
-			Assert::AreEqual((int8_t) -1, game.current_player());
+			Assert::IsNull(game.current_player());
 			game.start();
 
 			Assert::AreEqual((uint8_t) 6, GameLogic::get_instance().get_player(0)->count());
@@ -43,14 +43,14 @@ namespace TestProject
 			Assert::IsFalse(game.can_accept_cards());
 			Assert::IsFalse(game.can_complete_action());
 			Assert::IsFalse(game.can_change_move());
-			Assert::IsTrue(game.current_player() == 0 || game.current_player() == 1);
+			Assert::IsTrue(game.current_player_ind() == 0 || game.current_player_ind() == 1);
 
 			game.reset();
 			Assert::IsFalse(game.can_accept_move());
 			Assert::IsFalse(game.can_accept_cards());
 			Assert::IsFalse(game.can_complete_action());
 			Assert::IsFalse(game.can_change_move());
-			Assert::AreEqual((int8_t) -1, game.current_player());
+			Assert::IsNull(game.current_player());
 
 			Assert::AreEqual((uint8_t) 0, GameLogic::get_instance().get_player(0)->count());
 			Assert::AreEqual((uint8_t) 0, GameLogic::get_instance().get_player(1)->count());
@@ -64,23 +64,25 @@ namespace TestProject
 			game.reset();
 			game.start();
 
-			Assert::AreEqual((int8_t)-1, game.get_current_card());
+			Assert::AreEqual((int8_t)-1, game.current_card());
 
 			Assert::IsFalse(game.card_shift(-1));
 			Assert::IsFalse(game.card_shift(+1));
 			Assert::IsFalse(game.card_enter());
 			Assert::IsFalse(game.card_cancel());
-			Assert::IsFalse(game.card_put());
+			Assert::IsFalse(game.card_enter());
 
 			game.accept_move();
 
 			Assert::IsTrue(game.card_shift(-1));
+			Assert::AreEqual((int8_t)5, game.current_card());
 			Assert::IsTrue(game.card_shift(+1));
+			Assert::AreEqual((int8_t)0, game.current_card());
 			Assert::IsTrue(game.card_enter());
+			Assert::AreEqual((int8_t)0, game.current_card());
 			Assert::IsTrue(game.card_cancel());
-			Assert::IsFalse(game.card_put());
 			Assert::IsTrue(game.card_enter());
-			Assert::IsTrue(game.card_put());
+			Assert::IsTrue(game.card_enter());
 
 			Assert::IsTrue(game.can_change_move());
 		}
