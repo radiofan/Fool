@@ -283,6 +283,26 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 		}
 	}
 
+	
+	std::wcout << set_coord(0, 22) << SColor(BackColor::YELLOW_DARK, TextColor::RED_DARK)
+			   << L" ╚════════════════════════════════════════════════════════════════════════════╝ ";
+	clear(0, 23, 80, 1);
+
+	if(app.current_card() != -1){
+		int16_t tmp_y = (app.current_card() / 9) * 5, tmp_x = (app.current_card() % 9) * 8;
+		fill(tmp_x+4, tmp_y+22, 6, 1, BackColor::GRAY_DARK, TextColor::RED_DARK, tmp_y ? L' ' : L'═');
+		Draw::draw(*(app.current_player()->get_card(app.current_card())), tmp_x+4, tmp_y+23);
+		clear(tmp_x+4, tmp_y+28, 6, 1);
+	}
+
+	if(app.current_couple() != -1 && app.card_in_hand()){
+		int16_t tmp_x = app.current_couple() * 8;
+		Draw::draw(*(app.card_in_hand()), tmp_x+16, 15);
+		if(app.current_player()->get_type() != PlayerType::DEFENDER){
+			fill(tmp_x+16, 14, 6, 1, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'▒');
+		}
+	}
+
 	std::wcout << set_coord() << SColor();
 #endif // TEST
 

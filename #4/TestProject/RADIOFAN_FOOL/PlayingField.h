@@ -101,6 +101,10 @@ class PlayingField_defenition : public NeedRedraw{
 			}
 			return ret;
 		}
+
+		void set_need_redraw(){
+			need_redraw = true;
+		}
 };
 
 class PlayingField : public PlayingField_defenition{

@@ -23,6 +23,7 @@ class Player : public NeedRedraw{
 			if(Type < PlayerType::None || Type > PlayerType::MAIN_ATTACKER)
 				throw L"Type out of range";
 			type = Type;
+			need_redraw = true;
 		}
 
 		uint8_t count(){

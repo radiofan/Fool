@@ -31,7 +31,7 @@ class App_defenition : public NeedRedraw{
 
 	public:
 #ifndef TEST
-		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 300;
+		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 100;
 #else
 		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 1;
 #endif // !TEST
@@ -81,6 +81,10 @@ class App_defenition : public NeedRedraw{
 
 		Player* current_player(){
 			return _current_player;
+		}
+
+		Card* card_in_hand(){
+			return _card_in_hand;
 		}
 
 		int8_t current_player_ind(){
@@ -157,7 +161,7 @@ class App_defenition : public NeedRedraw{
 			_card_in_hand = nullptr;
 
 			if(_current_player->count()){
-				_current_player->add(_current_player->take_card(0));//заставим обновиться
+				_current_player->set_type(_current_player->get_type());//заставим обновиться
 				_current_card = 0;
 
 			}
@@ -175,18 +179,20 @@ class App_defenition : public NeedRedraw{
 			if(!shift)
 				return false;
 
-
 			if(_card_in_hand && _current_player->get_type() == PlayerType::DEFENDER){
+				PlayingField& playing_field = PlayingField::get_instance();
+
 				if(shift > 0){
-					shift = PlayingField::get_instance().get_right_not_broken_couple(_current_couple);
+					shift = playing_field.get_right_not_broken_couple(_current_couple);
 				}else{
-					shift = PlayingField::get_instance().get_left_not_broken_couple(_current_couple);
+					shift = playing_field.get_left_not_broken_couple(_current_couple);
 				}
 				if(shift == _current_couple){
 					return false;
 				}else{
 					_current_couple = shift;
 					need_redraw = true;
+					playing_field.set_need_redraw();
 					return true;
 				}
 			}
@@ -205,6 +211,7 @@ class App_defenition : public NeedRedraw{
 				_current_card = shift;
 			}
 
+			_current_player->set_type(_current_player->get_type());
 			need_redraw = true;
 			return true;
 		}
@@ -278,6 +285,9 @@ class App_defenition : public NeedRedraw{
 			_card_in_hand = nullptr;
 			_current_card = 0;
 			_current_couple = -1;
+
+			PlayingField::get_instance().set_need_redraw();
+			need_redraw = true;
 		}
 
 		void wait_events(){
