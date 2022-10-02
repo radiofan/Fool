@@ -282,6 +282,8 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 			std::wcout << L" защита ";
 		}
 	}
+
+	std::wcout << set_coord() << SColor();
 #endif // TEST
 
 

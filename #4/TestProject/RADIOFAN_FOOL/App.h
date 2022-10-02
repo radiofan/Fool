@@ -17,7 +17,12 @@ class App_defenition : public NeedRedraw{
 		}
 
 	public:
-		const uint64_t CARD_DISTRIBUTION_DELAY_MS = 300;
+#ifndef TEST
+		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 300;
+#else
+		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 1;
+#endif // !TEST
+
 
 		void reset(){
 			Draw::draw();
@@ -70,7 +75,6 @@ class App_defenition : public NeedRedraw{
 			PackCards::get_instance().set_trump();
 
 			_current_player = game_logic.get_first_player();
-			_current_player = 0;
 			_can_accept_move = true;
 			this->need_redraw = true;
 
@@ -80,15 +84,16 @@ class App_defenition : public NeedRedraw{
 		}
 
 		void redraw(){
+			Player* tmp = nullptr;
 			if(_current_player == -1){
-				Player tmp;
-				Draw::draw(tmp, 4, 4, PlayerDrawType::HIDDEN);
+				tmp = GameLogic::get_instance().get_player(0);
 			}else{
-				Player* tmp = GameLogic::get_instance().get_player(_current_player^0x01);
-				if(tmp->is_need_redraw()){
-					Draw::draw(*tmp, 4, 4, PlayerDrawType::HIDDEN);
-				}
+				tmp = GameLogic::get_instance().get_player(_current_player^0x01);
 			}
+			if(tmp->is_need_redraw()){
+				Draw::draw(*tmp, 4, 4, PlayerDrawType::HIDDEN);
+			}
+
 			if(BrokenCards::get_instance().is_need_redraw()){
 				Draw::draw(BrokenCards::get_instance(), 4, 14);
 			}
@@ -98,14 +103,20 @@ class App_defenition : public NeedRedraw{
 			if(PackCards::get_instance().is_need_redraw()){
 				Draw::draw(PackCards::get_instance(), 66, 14);
 			}
+
+			
+			tmp = nullptr;
+			PlayerDrawType pt = PlayerDrawType::CURRENT_HIDDEN;
 			if(_current_player == -1){
-				Player tmp;
-				Draw::draw(tmp, 4, 24, PlayerDrawType::CURRENT_HIDDEN);
+				tmp = GameLogic::get_instance().get_player(1);
 			}else{
-				Player* tmp = GameLogic::get_instance().get_player(_current_player);
-				if(tmp->is_need_redraw()){
-					Draw::draw(*tmp, 4, 24, tmp->get_type() == PlayerType::None ? PlayerDrawType::CURRENT_HIDDEN : PlayerDrawType::CURRENT_OPEN);
+				tmp = GameLogic::get_instance().get_player(_current_player);
+				if(tmp->get_type() != PlayerType::None){
+					pt = PlayerDrawType::CURRENT_OPEN;
 				}
+			}
+			if(tmp->is_need_redraw()){
+				Draw::draw(*tmp, 4, 24, pt);
 			}
 
 			if(this->need_redraw){

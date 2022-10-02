@@ -22,7 +22,7 @@ namespace TestProject
 	public:
 
 		
-
+		//класс приложения App
 		/// тест начала работы класса приложения
 		TEST_METHOD(Test_App__start){
 			App& game = App::get_instance();
@@ -34,11 +34,55 @@ namespace TestProject
 			Assert::AreEqual((int8_t) -1, game.current_player());
 			game.start();
 
+			Assert::AreEqual((uint8_t) 6, GameLogic::get_instance().get_player(0)->count());
+			Assert::AreEqual((uint8_t) 6, GameLogic::get_instance().get_player(1)->count());
+			Assert::AreEqual((uint8_t) (36-12), PackCards::get_instance().count());
+			Assert::IsNotNull(PackCards::get_instance().get_trump());
+
 			Assert::IsTrue(game.can_accept_move());
 			Assert::IsFalse(game.can_accept_cards());
 			Assert::IsFalse(game.can_complete_action());
 			Assert::IsFalse(game.can_change_move());
 			Assert::IsTrue(game.current_player() == 0 || game.current_player() == 1);
+
+			game.reset();
+			Assert::IsFalse(game.can_accept_move());
+			Assert::IsFalse(game.can_accept_cards());
+			Assert::IsFalse(game.can_complete_action());
+			Assert::IsFalse(game.can_change_move());
+			Assert::AreEqual((int8_t) -1, game.current_player());
+
+			Assert::AreEqual((uint8_t) 0, GameLogic::get_instance().get_player(0)->count());
+			Assert::AreEqual((uint8_t) 0, GameLogic::get_instance().get_player(1)->count());
+			Assert::AreEqual((uint8_t) (36), PackCards::get_instance().count());
+			Assert::IsNull(PackCards::get_instance().get_trump());
+		}
+
+		/// тест реализации метода события принять ход(атака) класса приложения
+		TEST_METHOD(Test_App__accept_move){
+			App& game = App::get_instance();
+			game.reset();
+			game.start();
+
+			Assert::AreEqual((int8_t)-1, game.get_current_card());
+
+			Assert::IsFalse(game.card_shift(-1));
+			Assert::IsFalse(game.card_shift(+1));
+			Assert::IsFalse(game.card_enter());
+			Assert::IsFalse(game.card_cancel());
+			Assert::IsFalse(game.card_put());
+
+			game.accept_move();
+
+			Assert::IsTrue(game.card_shift(-1));
+			Assert::IsTrue(game.card_shift(+1));
+			Assert::IsTrue(game.card_enter());
+			Assert::IsTrue(game.card_cancel());
+			Assert::IsFalse(game.card_put());
+			Assert::IsTrue(game.card_enter());
+			Assert::IsTrue(game.card_put());
+
+			Assert::IsTrue(game.can_change_move());
 		}
 
 		//логика игры GameLogic
@@ -229,16 +273,25 @@ namespace TestProject
 				Assert::IsTrue(true);
 			}
 
-			std::vector<Card*> all_cards(36);
+			Card all_cards[36];
 			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
 				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
-					all_cards[card_ind] = new Card(card_cost, (CardSuit)card_suit);
+					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
 				}
 			}
 
-			for(int8_t i=all_cards.size()-1; i>=0; i--){
-				player.add(all_cards[i]);
+			std::vector<Card*> all_cards_arr(36);
+			for(uint8_t i=0; i<all_cards_arr.size(); i++){
+				all_cards_arr[i] = &all_cards[i];
 			}
+
+			std::random_shuffle(all_cards_arr.begin(), all_cards_arr.end());
+
+			for(uint8_t i=0; i<all_cards_arr.size(); i++){
+				player.add(all_cards_arr[i]);
+			}
+
+			std::sort(all_cards_arr.begin(), all_cards_arr.end());
 
 			
 			try{
@@ -248,39 +301,29 @@ namespace TestProject
 				Assert::IsTrue(true);
 			}
 
-			Card* tmp = nullptr;
-
-			tmp = player.take_card(0);
-			Assert::IsTrue(tmp == all_cards[0]);
-			all_cards.erase(all_cards.begin() + 0);
-			delete tmp;
-			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == all_cards[i]);
+			Assert::IsTrue(player.take_card(0) == all_cards_arr[0]);
+			all_cards_arr.erase(all_cards_arr.begin() + 0);
+			for(uint8_t i=0; i<all_cards_arr.size(); i++){
+				Assert::IsTrue(player.get_card(i) == all_cards_arr[i]);
 			}
 			
-			tmp = player.take_card(34);
-			Assert::IsTrue(tmp == all_cards[34]);
-			all_cards.erase(all_cards.begin() + 34);
-			delete tmp;
-			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == all_cards[i]);
+			Assert::IsTrue(player.take_card(34) == all_cards_arr[34]);
+			all_cards_arr.erase(all_cards_arr.begin() + 34);
+			for(uint8_t i=0; i<all_cards_arr.size(); i++){
+				Assert::IsTrue(player.get_card(i) == all_cards_arr[i]);
 			}
 			
-			tmp = player.take_card(16);
-			Assert::IsTrue(tmp == all_cards[16]);
-			all_cards.erase(all_cards.begin() + 16);
-			delete tmp;
-			for(uint8_t i=0; i<all_cards.size(); i++){
-				Assert::IsTrue(player.get_card(i) == all_cards[i]);
+			Assert::IsTrue(player.take_card(16) == all_cards_arr[16]);
+			all_cards_arr.erase(all_cards_arr.begin() + 16);
+			for(uint8_t i=0; i<all_cards_arr.size(); i++){
+				Assert::IsTrue(player.get_card(i) == all_cards_arr[i]);
 			}
 
-			while(all_cards.size()){
-				tmp = player.take_card(0);
-				Assert::IsTrue(tmp == all_cards[0]);
-				all_cards.erase(all_cards.begin() + 0);
-				delete tmp;
-				for(uint8_t i=0; i<all_cards.size(); i++){
-					Assert::IsTrue(player.get_card(i) == all_cards[i]);
+			while(all_cards_arr.size()){
+				Assert::IsTrue(player.take_card(0) == all_cards_arr[0]);
+				all_cards_arr.erase(all_cards_arr.begin() + 0);
+				for(uint8_t i=0; i<all_cards_arr.size(); i++){
+					Assert::IsTrue(player.get_card(i) == all_cards_arr[i]);
 				}
 			}
 
