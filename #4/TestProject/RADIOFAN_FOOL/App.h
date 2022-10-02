@@ -130,16 +130,28 @@ class App_defenition : public NeedRedraw{
 		}
 
 		void accept_move(){
+			//todo проверка на то что на столе есть карты, главный атакующий, все карты биты
+			//можно завершить кон
+
 			if(!_can_accept_move)
 				return;
 
-			_can_accept_move = false;
-			need_redraw = true;
-
 			
+			_can_accept_move = false;
+			_can_accept_cards = false;
+			_can_complete_action = false;
+			_can_change_move = false;
+
+			PlayingField& playing_field = PlayingField::get_instance();
+			if(_current_player->get_type() == PlayerType::MAIN_ATTACKER && playing_field.count() && playing_field.is_all_card_couples_broken()){
+				_can_complete_action = true;
+			}
+
 			if(_current_player->get_type() == PlayerType::DEFENDER){
 				_can_accept_cards = true;
 			}
+
+			need_redraw = true;
 			
 			_current_couple = -1;
 			_card_in_hand = nullptr;
@@ -160,16 +172,31 @@ class App_defenition : public NeedRedraw{
 
 		bool card_shift(int32_t shift){
 
-			//todo сдвиг по столу
-
 			if(!shift)
 				return false;
+
+
+			if(_card_in_hand && _current_player->get_type() == PlayerType::DEFENDER){
+				if(shift > 0){
+					shift = PlayingField::get_instance().get_right_not_broken_couple(_current_couple);
+				}else{
+					shift = PlayingField::get_instance().get_left_not_broken_couple(_current_couple);
+				}
+				if(shift == _current_couple){
+					return false;
+				}else{
+					_current_couple = shift;
+					need_redraw = true;
+					return true;
+				}
+			}
 
 			if(_current_card == -1 || _current_player->count() == 1)
 				return false;
 
 			shift = shift / abs(shift);
 			shift += _current_card;
+
 			if(shift >= _current_player->count()){
 				_current_card = 0;
 			}else if(shift < 0){
@@ -206,12 +233,37 @@ class App_defenition : public NeedRedraw{
 					_current_couple = palying_field.count();
 				}else{
 					//защищающийся в свободное место
-					//todo
+					_current_couple = palying_field.get_right_not_broken_couple(-1);
 				}
 
 			}else{
 				//устанавливаем карту на стол
-				//todo
+				if(_current_player->get_type() != PlayerType::DEFENDER){
+					//атакующий
+					if(palying_field.can_add_attack_card(*_card_in_hand)){
+						palying_field.add_card_couple();
+						palying_field.get_card_couple(_current_couple).set_attack(_card_in_hand);
+						_can_change_move = true;
+					}else{
+						return false;
+					}
+				}else{
+					//защищающийся
+					CardCouple& tmp = palying_field.get_card_couple(_current_couple);;
+					if(tmp.set_defense(_card_in_hand, PackCards::get_instance().get_trump_suit())){
+						if(palying_field.is_all_card_couples_broken()){
+							_can_change_move = true;
+							_can_accept_cards = false;
+						}
+					}
+				}
+				_current_couple = -1;
+				_card_in_hand = nullptr;
+						
+				_current_card = -1;
+				if(_current_player->count()){
+					_current_card++;
+				}
 			}
 
 			need_redraw = true;

@@ -62,6 +62,45 @@ class PlayingField_defenition : public NeedRedraw{
 			}
 			this->reset();
 		}
+
+		bool can_add_attack_card(Card& attack){
+			if(!card_couples.size())
+				return true;
+			for(uint8_t i=0; i<card_couples.size(); i++){
+				if(card_couples[i].get_defense() && card_couples[i].get_defense()->get_cost() == attack.get_cost()
+				|| card_couples[i].get_attack() && card_couples[i].get_attack()->get_cost() == attack.get_cost()
+				){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		int8_t get_right_not_broken_couple(int8_t ind){
+			if(ind >= card_couples.size() || ind < 0)
+				ind = -1;
+			int8_t ret = -1;
+			for(ind++; ind<card_couples.size(); ind++){
+				if(!card_couples[ind].is_broken()){
+					ret = ind;
+					break;
+				}
+			}
+			return ret;
+		}
+
+		int8_t get_left_not_broken_couple(int8_t ind){
+			if(ind >= card_couples.size() || ind < 0)
+				ind = card_couples.size();
+			int8_t ret = -1;
+			for(ind--; ind >= 0; ind--){
+				if(!card_couples[ind].is_broken()){
+					ret = ind;
+					break;
+				}
+			}
+			return ret;
+		}
 };
 
 class PlayingField : public PlayingField_defenition{

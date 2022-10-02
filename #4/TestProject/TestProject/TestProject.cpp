@@ -79,10 +79,14 @@ namespace TestProject
 			Assert::IsTrue(game.card_shift(+1));
 			Assert::AreEqual((int8_t)0, game.current_card());
 			Assert::IsTrue(game.card_enter());
-			Assert::AreEqual((int8_t)0, game.current_card());
+			Assert::AreEqual((uint8_t)5, game.current_player()->count());
 			Assert::IsTrue(game.card_cancel());
+			Assert::AreEqual((int8_t)0, game.current_card());
+			Assert::AreEqual((uint8_t)6, game.current_player()->count());
 			Assert::IsTrue(game.card_enter());
+			Assert::AreEqual((uint8_t)5, game.current_player()->count());
 			Assert::IsTrue(game.card_enter());
+			Assert::AreEqual((uint8_t)5, game.current_player()->count());
 
 			Assert::IsTrue(game.can_change_move());
 		}

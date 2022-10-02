@@ -257,11 +257,11 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 	
 	std::wcout << set_coord(3, 1) << SColor(app.can_accept_move() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
 			   << L"1" << set_coord(5, 1) << L" принять ход";
-	if(app.can_accept_cards()){
+	if(app.current_player() && app.current_player()->get_type() == PlayerType::DEFENDER){
 	std::wcout << set_coord(19, 1) << SColor(app.can_accept_cards() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
 			   << L"2" << set_coord(21, 1) << L" принять карты";
 	}else{
-	std::wcout << set_coord(19, 1) << SColor(app.can_accept_cards() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
+	std::wcout << set_coord(19, 1) << SColor(app.can_complete_action() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
 			   << L"2" << set_coord(21, 1) << L" завершить кон";
 	}
 	std::wcout << set_coord(37, 1) << SColor(app.can_change_move() ? BackColor::CYAN : BackColor::GRAY_DARK, TextColor::GRAY)
