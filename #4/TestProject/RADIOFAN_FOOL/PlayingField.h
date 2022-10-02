@@ -28,6 +28,13 @@ class PlayingField_defenition : public NeedRedraw{
 			this->need_redraw = true;
 		}
 
+		void add_card_couple(){
+			if(card_couples.size() == MAX_CARD_COUPLES)
+				throw L"Count of card couples reached the limit";
+			card_couples.push_back(CardCouple());
+			this->need_redraw = true;
+		}
+
 		CardCouple& get_card_couple(uint8_t ind){
 			if(ind >= card_couples.size())
 				throw L"ind out of range";

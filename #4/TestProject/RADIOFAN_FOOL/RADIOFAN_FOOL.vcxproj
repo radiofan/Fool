@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Draw.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="BrokenCards.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardCouple.h" />
+    <ClInclude Include="ClassesInclude.h" />
     <ClInclude Include="CostConvertor.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="GameLogic.h" />

@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "App.h"
+#include "ClassesInclude.h"
 
 const wchar_t CostConvertor::cost_to_letter[] = {L'1', L'В', L'Д', L'К', L'Т'};
 
@@ -14,7 +14,7 @@ std::wostream& operator<<(std::wostream& os, const set_coord& tmp){
 }
 
 int32_t wmain(int32_t argc, wchar_t* argv[]){
-	App::get_instance();
+	Draw::draw(App::get_instance(), 0, 0);
 			
 	std::vector<Card> all_cards(36);
 	for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
@@ -23,38 +23,18 @@ int32_t wmain(int32_t argc, wchar_t* argv[]){
 		}
 	}
 
-	CardCouple cc_1 = CardCouple();
-	CardCouple cc_2 = CardCouple();
 	Draw::draw(PackCards::get_instance(), 66, 14);
 	Draw::draw(BrokenCards::get_instance(), 4, 14);
 
-	Draw::draw(cc_1, 15, 13);
-	Draw::draw(cc_2, 23, 13);
-	Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS*4);
-
-	cc_1.set_attack(&all_cards[4]);
-
-	Draw::draw(cc_1, 15, 13);
-	Draw::draw(cc_2, 23, 13);
-	Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS*4);
-
-	cc_2.set_attack(&all_cards[19]);
-
-	Draw::draw(cc_1, 15, 13);
-	Draw::draw(cc_2, 23, 13);
-	Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS*4);
-
-	cc_1.set_defense(&all_cards[6]);
-
-	Draw::draw(cc_1, 15, 13);
-	Draw::draw(cc_2, 23, 13);
-	Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS*4);
-
-	cc_2.set_defense(&all_cards[20]);
-
-	Draw::draw(cc_1, 15, 13);
-	Draw::draw(cc_2, 23, 13);
-	Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS*4);
+	for(uint8_t i=0; i<6; i++){
+		PlayingField::get_instance().add_card_couple();
+		PlayingField::get_instance().get_card_couple(i).set_attack(&all_cards[i]);
+		Draw::draw(PlayingField::get_instance(), 15, 13);
+		Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS);
+		PlayingField::get_instance().get_card_couple(i).set_defense(&all_cards[i+9], all_cards[i+9].get_suit());
+		Draw::draw(PlayingField::get_instance(), 15, 13);
+		Sleep(App::get_instance().CARD_DISTRIBUTION_DELAY_MS);
+	}
 
 	/*
 	Player hidden = Player();
