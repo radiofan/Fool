@@ -4,31 +4,24 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 const wchar_t CostConvertor::cost_to_letter[] = {L'1', L'В', L'Д', L'К', L'Т'};
 
+
+std::wostream& operator<<(std::wostream& os, const SColor& color){
+	color.set_color();
+	return os;
+}
+std::wostream& operator<<(std::wostream& os, const set_coord& tmp){
+	tmp.set();
+	return os;
+}
+
+#include "Draw.cpp"
+
 namespace TestProject
 {
 	TEST_CLASS(TestProject){
 	public:
 
-
-		/// тест реализации и использования класса рисования
-		TEST_METHOD(Test_Draw){
-			Draw::draw(BrokenCards::get_instance(), 0, 0);
-			Draw::draw(Card(), 0, 0);
-			Draw::draw(CardCouple(), 0, 0);
-			Draw::draw(PackCards::get_instance(), 0, 0);
-			Draw::draw(Player(), 0, 0, PlayerDrawType::HIDDEN);
-			Draw::draw(Player(), 0, 0, PlayerDrawType::CURRENT);
-			Draw::draw(PlayingField::get_instance(), 0, 0);
-			Draw::draw(App::get_instance(), 0, 0);
-			Assert::IsTrue(true);
-		}
-
 		
-		/// тест реализации синглтона класса приложения
-		TEST_METHOD(Test_App__get_instance){
-			App& game = App::get_instance();
-			Assert::IsTrue(true);
-		}
 
 		/// тест начала работы класса приложения
 		TEST_METHOD(Test_App__start){
@@ -172,11 +165,6 @@ namespace TestProject
 		
 
 		//игрок Player
-		/// тест реализации класса игрока
-		TEST_METHOD(Test_Player){
-			Player player();
-			Assert::IsTrue(true);
-		}
 
 		// тест реализации PlayerType
 		TEST_METHOD(Test_Player__enum_PlayerType){
@@ -300,11 +288,6 @@ namespace TestProject
 		}
 		
 		//карта Card
-		/// тест реализации класса карты
-		TEST_METHOD(Test_Card){
-			Card card();
-			Assert::IsTrue(true);
-		}
 
 		/// тест конструктора всех карт
 		TEST_METHOD(Test_Card_Construct){
@@ -352,11 +335,6 @@ namespace TestProject
 		}
 		
 		//поле игры PlayingField
-		/// тест реализации синглтона класса поля игры
-		TEST_METHOD(Test_PlayingField){
-			PlayingField& playing_field = PlayingField::get_instance();
-			Assert::IsTrue(true);
-		}
 
 		/// тест реализации методов класса поля игры
 		TEST_METHOD(Test_PlayingField_methods){
@@ -458,11 +436,6 @@ namespace TestProject
 		}
 		
 		//пара карт CardCouple
-		/// тест реализации класса пары карт
-		TEST_METHOD(Test_CardCouple){
-			CardCouple card_couple();
-			Assert::IsTrue(true);
-		}
 
 		/// тест реализации методов пары карт
 		TEST_METHOD(Test_CardCouple__test_1){
@@ -534,11 +507,6 @@ namespace TestProject
 		}
 		
 		//битые карты BrokenCards
-		/// тест реализации синглтона класса битых карт
-		TEST_METHOD(Test_BrokenCards){
-			BrokenCards& broken_cards = BrokenCards::get_instance();
-			Assert::IsTrue(true);
-		}
 
 		/// тест реализации метода добавления пар карт в биту класса битых карт
 		TEST_METHOD(Test_BrokenCards__add){
@@ -568,11 +536,6 @@ namespace TestProject
 		}
 		
 		//колода PackCards
-		/// тест реализации синглтона класса колоды карт
-		TEST_METHOD(Test_PackCards){
-			PackCards& pack_cards = PackCards::get_instance();
-			Assert::IsTrue(true);
-		}
 
 		/// тест реализации метода взятия карты из колоды
 		TEST_METHOD(Test_PackCards__pop){
@@ -636,11 +599,6 @@ namespace TestProject
 		}
 		
 		//конвертор CostConvertor
-		/// тест реализации класса конвертора стоимости карты
-		TEST_METHOD(Test_CostConvertor){
-			CostConvertor cost_convertor();
-			Assert::IsTrue(true);
-		}
 
 		/// тест правильной работы метода конвертации стоимости в букву
 		TEST_METHOD(Test_CostConvertor__cost2letter__work){
@@ -655,7 +613,7 @@ namespace TestProject
 			for(uint8_t i=2; i<10; i++){
 				Assert::AreEqual((wchar_t)(L'0'+i), CostConvertor::cost2letter(i));
 			}
-			Assert::AreEqual(L'0', CostConvertor::cost2letter(10));
+			Assert::AreEqual(L'1', CostConvertor::cost2letter(10));
 			Assert::AreEqual(L'В', CostConvertor::cost2letter(11));
 			Assert::AreEqual(L'Д', CostConvertor::cost2letter(12));
 			Assert::AreEqual(L'К', CostConvertor::cost2letter(13));
@@ -668,7 +626,7 @@ namespace TestProject
 			for(wchar_t i=L'2'; i<L'9'; i++){
 				Assert::AreEqual((uint8_t)(i-L'0'), CostConvertor::letter2cost(i));
 			}
-			Assert::AreEqual((uint8_t)10, CostConvertor::letter2cost(L'0'));
+			Assert::AreEqual((uint8_t)10, CostConvertor::letter2cost(L'1'));
 			Assert::AreEqual((uint8_t)11, CostConvertor::letter2cost(L'В'));
 			Assert::AreEqual((uint8_t)12, CostConvertor::letter2cost(L'Д'));
 			Assert::AreEqual((uint8_t)13, CostConvertor::letter2cost(L'К'));

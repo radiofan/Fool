@@ -26,12 +26,12 @@ class Player : public NeedRedraw{
 		}
 
 		uint8_t count(){
-			return cards.size();
+			return (uint8_t)cards.size();
 		}
 
 		void add(Card* card){
 			uint8_t L = 0,
-					R = cards.size(),
+					R = (uint8_t)cards.size(),
 					ind = L + (R - L) / 2;
 			int32_t diff;
  

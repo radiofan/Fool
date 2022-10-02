@@ -7,7 +7,9 @@
 #ifndef PCH_H
 #define PCH_H
 
+#define TEST
+
 #include "stdafx.h"
-#include "App.h"
+#include "ClassesInclude.h"
 
 #endif //PCH_H

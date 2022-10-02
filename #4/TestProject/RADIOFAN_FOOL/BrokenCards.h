@@ -18,7 +18,7 @@ class BrokenCards_defenition : public NeedRedraw{
 		}
 
 		uint8_t count(){
-			return broken_cards.size();
+			return (uint8_t)broken_cards.size();
 		}
 
 		void add(CardCouple& card_couple){

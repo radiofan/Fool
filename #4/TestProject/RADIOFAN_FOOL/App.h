@@ -80,36 +80,36 @@ class App_defenition : public NeedRedraw{
 		}
 
 		void redraw(){
-			if(this->need_redraw){
-				Draw::draw(*this, 0, 0);
-			}
-
 			if(_current_player == -1){
 				Player tmp;
-				Draw::draw(tmp, 0, 4, PlayerDrawType::HIDDEN);
+				Draw::draw(tmp, 4, 4, PlayerDrawType::HIDDEN);
 			}else{
 				Player* tmp = GameLogic::get_instance().get_player(_current_player^0x01);
 				if(tmp->is_need_redraw()){
-					Draw::draw(*tmp, 0, 4, PlayerDrawType::HIDDEN);
+					Draw::draw(*tmp, 4, 4, PlayerDrawType::HIDDEN);
 				}
 			}
 			if(BrokenCards::get_instance().is_need_redraw()){
 				Draw::draw(BrokenCards::get_instance(), 4, 14);
 			}
 			if(PlayingField::get_instance().is_need_redraw()){
-				Draw::draw(PlayingField::get_instance(), 20, 13);
+				Draw::draw(PlayingField::get_instance(), 15, 13);
 			}
 			if(PackCards::get_instance().is_need_redraw()){
 				Draw::draw(PackCards::get_instance(), 66, 14);
 			}
 			if(_current_player == -1){
 				Player tmp;
-				Draw::draw(tmp, 0, 24, PlayerDrawType::CURRENT_HIDDEN);
+				Draw::draw(tmp, 4, 24, PlayerDrawType::CURRENT_HIDDEN);
 			}else{
 				Player* tmp = GameLogic::get_instance().get_player(_current_player);
 				if(tmp->is_need_redraw()){
-					Draw::draw(*tmp, 0, 24, tmp->get_type() == PlayerType::None ? PlayerDrawType::CURRENT_HIDDEN : PlayerDrawType::CURRENT_OPEN);
+					Draw::draw(*tmp, 4, 24, tmp->get_type() == PlayerType::None ? PlayerDrawType::CURRENT_HIDDEN : PlayerDrawType::CURRENT_OPEN);
 				}
+			}
+
+			if(this->need_redraw){
+				Draw::draw(*this, 0, 0);
 			}
 		}
 };

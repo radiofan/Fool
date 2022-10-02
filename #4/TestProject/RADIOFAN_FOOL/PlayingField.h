@@ -18,7 +18,7 @@ class PlayingField_defenition : public NeedRedraw{
 		}
 
 		uint8_t count(){
-			return card_couples.size();
+			return (uint8_t)card_couples.size();
 		}
 
 		void add_card_couple(CardCouple& card_couple){

@@ -47,7 +47,7 @@ class PackCards_defenition : public NeedRedraw{
 		}
 
 		uint8_t count(){
-			return pack_cards.size();
+			return (uint8_t)pack_cards.size();
 		}
 
 		Card* set_trump(){
