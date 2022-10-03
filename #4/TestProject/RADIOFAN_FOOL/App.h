@@ -31,7 +31,7 @@ class App_defenition : public NeedRedraw{
 
 	public:
 #ifndef TEST
-		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 100;
+		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 300;
 #else
 		const uint32_t CARD_DISTRIBUTION_DELAY_MS = 1;
 #endif // !TEST
@@ -97,6 +97,16 @@ class App_defenition : public NeedRedraw{
 			}
 		}
 
+		int8_t another_player_ind(){
+			if(!_current_player)
+				return -1;
+			if(GameLogic::get_instance().get_player(0) == _current_player){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+
 		int8_t current_card(){
 			return _current_card;
 		}
@@ -107,17 +117,10 @@ class App_defenition : public NeedRedraw{
 
 		void start(){
 			GameLogic& game_logic = GameLogic::get_instance();
-			for(uint8_t i=0; i<6; i++){
-				Sleep(CARD_DISTRIBUTION_DELAY_MS);
-				Card* card = PackCards::get_instance().pop();
-				game_logic.get_player(0)->add(card);
-				this->redraw();
-				Sleep(CARD_DISTRIBUTION_DELAY_MS);
-				card = PackCards::get_instance().pop();
-				game_logic.get_player(1)->add(card);
-				this->redraw();
-			}
+			
 			Sleep(CARD_DISTRIBUTION_DELAY_MS);
+			hand_out_cards();
+
 			PackCards::get_instance().set_trump();
 
 			_current_player = game_logic.get_player(game_logic.get_first_player());
@@ -131,6 +134,37 @@ class App_defenition : public NeedRedraw{
 			this->wait_events();
 #endif // !TEST
 
+		}
+
+		void hand_out_cards(){
+			uint8_t player_ind = 0;
+			GameLogic& game_logic = GameLogic::get_instance();
+
+			Player* player = game_logic.get_player(0);
+			if(player->get_type() == PlayerType::DEFENDER){
+				player = game_logic.get_player(1);
+				player_ind = 1;
+			}
+
+			uint8_t full = 0;
+			PackCards& pack_cards = PackCards::get_instance();
+			while(full < 2){
+				if(player->count() >= 6){
+					full++;
+					player_ind = game_logic.get_another_player_ind(player_ind);
+					player = game_logic.get_player(player_ind);
+					continue;
+				}
+				if(!pack_cards.count())
+					break;
+				player->add(pack_cards.pop());
+				if(player->get_type() == PlayerType::None){
+					player_ind = game_logic.get_another_player_ind(player_ind);
+					player = game_logic.get_player(player_ind);
+				}
+				this->redraw();
+				Sleep(CARD_DISTRIBUTION_DELAY_MS);
+			}
 		}
 
 		void accept_move(){
@@ -175,6 +209,9 @@ class App_defenition : public NeedRedraw{
 				return;
 			
 			_current_card = -1;
+			_current_player->set_type(_current_player->get_type());
+			need_redraw = true;
+			redraw();
 			
 			PlayingField& playing_field = PlayingField::get_instance();
 
@@ -192,35 +229,34 @@ class App_defenition : public NeedRedraw{
 			redraw();
 			Sleep(CARD_DISTRIBUTION_DELAY_MS);
 
-			//todo раздать карты
-
+			hand_out_cards();
 			
 			_can_accept_cards = false;
 			_can_complete_action = false;
 			_can_change_move = false;
 			
 			GameLogic& game_logic = GameLogic::get_instance();
-			uint8_t tmp = current_player_ind();
 
+			//роли игроков меняются
 			if(!game_logic.get_player(0)->count() || !game_logic.get_player(1)->count()){
 				_can_accept_move = false;
 				if(_current_player->count() != 0){
-					_current_player->set_type(_current_player->get_type());
-					_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
-					_current_player->set_type(_current_player->get_type());
+					_current_player->set_type(PlayerType::DEFENDER);
+					_current_player = game_logic.get_player(another_player_ind());
+					_current_player->set_type(PlayerType::MAIN_ATTACKER);
 				}
 				status = GameStatus::FINISHED;
 			}else{
 				_can_accept_move = true;
-				_current_player->set_type(_current_player->get_type());
-				_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
-				_current_player->set_type(_current_player->get_type());
+				_current_player->set_type(PlayerType::DEFENDER);
+				_current_player = game_logic.get_player(another_player_ind());
+				_current_player->set_type(PlayerType::MAIN_ATTACKER);
 			}
 			need_redraw = true;
 			redraw();
 
 			if(status == GameStatus::FINISHED){
-				Draw::draw_win(game_logic.get_player(0)->count() == game_logic.get_player(1)->count() ? -1 : current_player_ind(), 15, 13);
+				Draw::draw_win(game_logic.get_player(0)->count() == game_logic.get_player(1)->count() ? -1 : current_player_ind(), 15, 12);
 			}
 		}
 
@@ -231,6 +267,9 @@ class App_defenition : public NeedRedraw{
 			PlayingField& playing_field = PlayingField::get_instance();
 
 			_current_card = -1;
+			_current_player->set_type(_current_player->get_type());
+			need_redraw = true;
+			redraw();
 
 			if(_card_in_hand){
 				_current_player->add(_card_in_hand);
@@ -247,13 +286,13 @@ class App_defenition : public NeedRedraw{
 				Sleep(CARD_DISTRIBUTION_DELAY_MS);
 			}
 
-			//todo раздать карты
+			hand_out_cards();
+
 			//роли игроков не меняются
 			GameLogic& game_logic = GameLogic::get_instance();
 
-			uint8_t tmp = current_player_ind();
 			_current_player->set_type(_current_player->get_type());
-			_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
+			_current_player = game_logic.get_player(another_player_ind());
 			_current_player->set_type(_current_player->get_type());
 			
 			_can_accept_cards = false;
@@ -270,7 +309,7 @@ class App_defenition : public NeedRedraw{
 			redraw();
 
 			if(status == GameStatus::FINISHED){
-				Draw::draw_win(current_player_ind(), 15, 13);
+				Draw::draw_win(current_player_ind(), 15, 12);
 			}
 		}
 
@@ -278,8 +317,20 @@ class App_defenition : public NeedRedraw{
 			if(!_can_change_move)
 				return;
 
+			PlayingField& playing_field = PlayingField::get_instance();
+
 			if(_card_in_hand){
 				_current_player->add(_card_in_hand);
+				_card_in_hand = nullptr;
+				if(_current_player->get_type() == PlayerType::DEFENDER){
+					playing_field.set_need_redraw_couple(_current_couple);
+				}else{
+					playing_field.set_need_redraw_couple(0);
+				}
+				_current_couple = -1;
+				need_redraw = true;
+				redraw();
+				Sleep(CARD_DISTRIBUTION_DELAY_MS);
 			}
 			
 			_can_accept_move = true;
@@ -293,9 +344,8 @@ class App_defenition : public NeedRedraw{
 
 			GameLogic& game_logic = GameLogic::get_instance();
 
-			uint8_t tmp = current_player_ind();
 			_current_player->set_type(_current_player->get_type());
-			_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
+			_current_player = game_logic.get_player(another_player_ind());
 			_current_player->set_type(_current_player->get_type());
 
 			need_redraw = true;
@@ -373,11 +423,15 @@ class App_defenition : public NeedRedraw{
 			}else{
 				//устанавливаем карту на стол
 				if(_current_player->get_type() != PlayerType::DEFENDER){
+					GameLogic& game_logic = GameLogic::get_instance();
 					//атакующий
-					if(palying_field.can_add_attack_card(*_card_in_hand)){
+					//проверка на возможность установить атакующую карту и наличие карт у защищающегося
+					if(palying_field.can_add_attack_card(*_card_in_hand)
+					&& game_logic.get_player(another_player_ind())->count() >= palying_field.not_broken_couples_count()+1){
 						palying_field.add_card_couple();
 						palying_field.get_card_couple(_current_couple).set_attack(_card_in_hand);
 						_can_change_move = true;
+						_can_complete_action = false;
 					}else{
 						return false;
 					}
@@ -411,8 +465,12 @@ class App_defenition : public NeedRedraw{
 			if(!_card_in_hand)
 				return false;
 
+			
+
 			if(_current_player->get_type() == PlayerType::DEFENDER){
 				PlayingField::get_instance().set_need_redraw_couple(_current_couple);
+			}else{
+				PlayingField::get_instance().set_need_redraw_couple(0);
 			}
 
 			_current_player->add(_card_in_hand);
@@ -463,6 +521,11 @@ class App_defenition : public NeedRedraw{
 						break;
 				}
 				redraw();
+			}
+
+			key = 0;
+			while(key != 27){
+				key = _getch();
 			}
 		}
 

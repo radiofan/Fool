@@ -74,7 +74,7 @@ void Draw::draw_player_current_open(Player& player, uint16_t x, uint16_t y){
 void Draw::draw_player_current_hidden(Player& player, uint16_t x, uint16_t y){
 
 	//очистка
-	clear(x, y, 70, 20);
+	clear(x, y, 70, 24);
 	draw_player_hidden(player, x, y);
 }
 void Draw::draw_card_border(uint16_t x, uint16_t y, BackColor bc, TextColor tc){
@@ -289,8 +289,8 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 	clear(0, 23, 80, 1);
 
 	if(app.current_card() != -1){
-		int16_t tmp_y = (app.current_card() / 9) * 5, tmp_x = (app.current_card() % 9) * 8;
-		fill(tmp_x+4, tmp_y+22, 6, 1, BackColor::GRAY_DARK, TextColor::RED_DARK, tmp_y ? L' ' : L'═');
+		int16_t tmp_y = (app.current_card() / 9) * 6, tmp_x = (app.current_card() % 9) * 8;
+		fill(tmp_x+4, tmp_y+22, 6, 1, tmp_y ? BackColor::GRAY : BackColor::GRAY_DARK, TextColor::RED_DARK, tmp_y ? L' ' : L'═');
 		Draw::draw(*(app.current_player()->get_card(app.current_card())), tmp_x+4, tmp_y+23);
 		clear(tmp_x+4, tmp_y+28, 6, 1);
 	}
@@ -305,15 +305,13 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 		}
 		Draw::draw(*(app.card_in_hand()), tmp_x+16, 15);
 		if(app.current_player()->get_type() != PlayerType::DEFENDER){
-			fill(tmp_x+16, 14, 6, 1, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'▒');
+			fill(tmp_x+16, 14, 6, 1, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'░');
 		}
 	}
 
 	std::wcout << set_coord() << SColor();
 #endif // TEST
 
-
-	//todo отображение выбранных карт
 	app.redrawed();
 }
 
@@ -323,20 +321,22 @@ void Draw::draw_win(int8_t player_ind, uint16_t x, uint16_t y){
 
 	BackColor bc = (player_ind == 0 ? BackColor::RED_DARK : (player_ind == 1 ? BackColor::BLUE_DARK : BackColor::GRAY_DARK));
 
-	fill(x, y, 47, 7, bc, TextColor::GRAY);
+	fill(x+1, y, 47, 1, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'▒');
+	fill(x+47, y, 1, 7, BackColor::GREEN_DARK, TextColor::GRAY_DARK, L'▒');
+	fill(x, y+1, 47, 7, bc, TextColor::GRAY);
 
 	std::wcout << SColor(bc, TextColor::GRAY);
-	std::wcout << set_coord(x, y)   << L"╔═════════════════════════════════════════════╗"
-			   << set_coord(x, y+6) << L"╚═════════════════════════════════════════════╝";
-	for(uint8_t i=1; i<=5; i++){
-	std::wcout << set_coord(x, y+i)    << L"║"
-			   << set_coord(x+46, y+i) << L"║";
+	std::wcout << set_coord(x, y+1) << L" ╔═══════════════════════════════════════════╗ "
+			   << set_coord(x, y+7) << L" ╚═══════════════════════════════════════════╝ ";
+	for(uint8_t i=2; i<=6; i++){
+	std::wcout << set_coord(x, y+i)    << L" ║"
+			   << set_coord(x+45, y+i) << L"║ ";
 	}
 	
-	if(player_ind = -1){
-		std::wcout << set_coord(x+16, y+3) << L"игрок " << player_ind << L" победил";
+	if(player_ind != -1){
+		std::wcout << set_coord(x+16, y+4) << L"игрок " << (player_ind+1) << L" победил";
 	}else{
-		std::wcout << set_coord(x+21, y+3) << L"ничья";
+		std::wcout << set_coord(x+21, y+4) << L"ничья";
 	}
 	
 	std::wcout << set_coord() << SColor();

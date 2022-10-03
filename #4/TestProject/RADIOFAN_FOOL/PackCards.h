@@ -10,8 +10,8 @@ class PackCards_defenition : public NeedRedraw{
 	protected:
 		PackCards_defenition() : trump(nullptr){
 			//создаем все карты
-			for(uint8_t card_suit=1, card_ind=0; card_suit<=4; card_suit++){
-				for(uint8_t card_cost=6; card_cost<=14; card_cost++, card_ind++){
+			for(uint8_t card_cost=6, card_ind=0; card_cost<=14; card_cost++){
+				for(uint8_t card_suit=1; card_suit<=4; card_suit++, card_ind++){
 					all_cards[card_ind] = Card(card_cost, (CardSuit)card_suit);
 				}
 			}

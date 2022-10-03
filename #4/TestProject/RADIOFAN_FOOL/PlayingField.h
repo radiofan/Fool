@@ -21,6 +21,19 @@ class PlayingField_defenition : public NeedRedraw{
 			return (uint8_t)card_couples.size();
 		}
 
+		uint8_t broken_couples_count(){
+			uint8_t ret = 0;
+			for(uint8_t i=0; i<card_couples.size(); i++){
+				if(card_couples[i].is_broken())
+					ret++;
+			}
+			return ret;
+		}
+
+		uint8_t not_broken_couples_count(){
+			return card_couples.size() - broken_couples_count();
+		}
+
 		void add_card_couple(CardCouple& card_couple){
 			if(card_couples.size() == MAX_CARD_COUPLES)
 				throw L"Count of card couples reached the limit";
@@ -137,8 +150,10 @@ class PlayingField_defenition : public NeedRedraw{
 		}
 
 		void set_need_redraw_couple(int8_t ind){
-			get_card_couple(ind).set_need_redraw();
 			need_redraw = true;
+			if(ind >= card_couples.size())
+				return;
+			get_card_couple(ind).set_need_redraw();
 		}
 };
 
