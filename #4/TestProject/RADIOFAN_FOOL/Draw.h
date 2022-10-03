@@ -32,4 +32,5 @@ class Draw{
 		static void draw(Player& player, uint16_t x, uint16_t y, PlayerDrawType type);
 		static void draw(PlayingField_defenition& playing_field, uint16_t x, uint16_t y);
 		static void draw(App_defenition& app, uint16_t x, uint16_t y);
+		static void draw_win(uint8_t player_ind, uint16_t x, uint16_t y);
 };

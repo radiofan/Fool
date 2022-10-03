@@ -142,11 +142,17 @@ class App_defenition : public NeedRedraw{
 			_can_complete_action = false;
 			_can_change_move = false;
 
+			//главный атакющий может завершить кон если на столе есть карты и они побиты
 			PlayingField& playing_field = PlayingField::get_instance();
 			if(_current_player->get_type() == PlayerType::MAIN_ATTACKER && playing_field.count() && playing_field.is_all_card_couples_broken()){
 				_can_complete_action = true;
+
+			//атакующий может передать ход если на столе есть карты, и они не побиты
+			}else if(_current_player->get_type() != PlayerType::DEFENDER && playing_field.count() && !playing_field.is_all_card_couples_broken()){
+				_can_change_move = true;
 			}
 
+			//защищающийся может принять карты
 			if(_current_player->get_type() == PlayerType::DEFENDER){
 				_can_accept_cards = true;
 			}
@@ -166,7 +172,55 @@ class App_defenition : public NeedRedraw{
 
 		void complete_action(){}//todo
 
-		void accept_cards(){}//todo
+		void accept_cards(){
+			if(!_can_accept_cards)
+				return;
+
+			PlayingField& playing_field = PlayingField::get_instance();
+
+			_current_card = -1;
+
+			if(_card_in_hand){
+				_current_player->add(_card_in_hand);
+				_card_in_hand = nullptr;
+				playing_field.set_need_redraw_couple(_current_couple);
+				_current_couple = -1;
+				need_redraw = true;
+				redraw();
+				Sleep(CARD_DISTRIBUTION_DELAY_MS);
+			}
+			for(;playing_field.count();){
+				playing_field.move_couple_to_player(0, *_current_player);
+				redraw();
+				Sleep(CARD_DISTRIBUTION_DELAY_MS);
+			}
+
+			//todo раздать карты
+			//роли игроков не меняются
+			GameLogic& game_logic = GameLogic::get_instance();
+
+			uint8_t tmp = current_player_ind();
+			_current_player->set_type(_current_player->get_type());
+			_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
+			_current_player->set_type(_current_player->get_type());
+			
+			_can_accept_cards = false;
+			_can_complete_action = false;
+			_can_change_move = false;
+
+			if(_current_player->count()){
+				_can_accept_move = true;
+			}else{
+				_can_accept_move = false;
+				status = GameStatus::FINISHED;
+			}
+			need_redraw = true;
+			redraw();
+
+			if(status == GameStatus::FINISHED){
+				Draw::draw_win(current_player_ind(), 15, 13);
+			}
+		}
 
 		void change_move(){
 			if(!_can_change_move)
@@ -185,9 +239,11 @@ class App_defenition : public NeedRedraw{
 			_current_card = -1;
 			_current_couple = -1;
 
+			GameLogic& game_logic = GameLogic::get_instance();
+
 			uint8_t tmp = current_player_ind();
 			_current_player->set_type(_current_player->get_type());
-			_current_player = GameLogic::get_instance().get_player(tmp ^ 0x01);
+			_current_player = game_logic.get_player(game_logic.get_another_player_ind(tmp));
 			_current_player->set_type(_current_player->get_type());
 
 			need_redraw = true;
@@ -278,6 +334,8 @@ class App_defenition : public NeedRedraw{
 					CardCouple& tmp = palying_field.get_card_couple(_current_couple);;
 					if(tmp.set_defense(_card_in_hand, PackCards::get_instance().get_trump_suit())){
 						PlayingField::get_instance().set_need_redraw_couple(_current_couple);
+						//если карта была установлена
+						//то можно только передать ход атакующему
 						_can_change_move = true;
 						_can_accept_cards = false;
 					}else{

@@ -54,9 +54,13 @@ class GameLogic_defenition{
 			}
 
 			players[first].set_type(PlayerType::MAIN_ATTACKER);
-			players[first ^ 0x01].set_type(PlayerType::DEFENDER);
+			players[get_another_player_ind(first)].set_type(PlayerType::DEFENDER);
 
 			return first;
+		}
+
+		uint8_t get_another_player_ind(uint8_t ind){
+			return ind ? 0 : 1;
 		}
 };
 

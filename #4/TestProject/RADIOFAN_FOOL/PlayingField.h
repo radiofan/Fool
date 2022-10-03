@@ -63,6 +63,24 @@ class PlayingField_defenition : public NeedRedraw{
 			this->reset();
 		}
 
+		void move_couple_to_player(uint8_t couple_ind, Player& player){
+			if(couple_ind >= card_couples.size())
+				throw L"couple_ind out of range";
+
+			CardCouple tmp = card_couples[couple_ind];
+			if(tmp.get_defense()){
+				player.add(tmp.get_defense());
+			}
+			if(tmp.get_attack()){
+				player.add(tmp.get_attack());
+			}
+			card_couples.erase(card_couples.begin()+couple_ind);
+			for(couple_ind; couple_ind<card_couples.size(); couple_ind++){
+				card_couples[couple_ind].set_need_redraw();
+			}
+			need_redraw = true;
+		}
+
 		bool can_add_attack_card(Card& attack){
 			if(!card_couples.size())
 				return true;

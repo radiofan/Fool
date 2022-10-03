@@ -316,3 +316,23 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 	//todo отображение выбранных карт
 	app.redrawed();
 }
+
+
+void Draw::draw_win(uint8_t player_ind, uint16_t x, uint16_t y){
+#ifndef TEST
+
+	fill(x, y, 47, 7, player_ind == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK, TextColor::GRAY);
+
+	std::wcout << SColor(player_ind == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK, TextColor::GRAY);
+	std::wcout << set_coord(x, y)   << L"╔═════════════════════════════════════════════╗"
+			   << set_coord(x, y+6) << L"╚═════════════════════════════════════════════╝";
+	for(uint8_t i=1; i<=5; i++){
+	std::wcout << set_coord(x, y+i)    << L"║"
+			   << set_coord(x+46, y+i) << L"║";
+	}
+	
+	std::wcout << set_coord(x+16, y+3) << L"игрок " << player_ind << L" победил";
+	
+	std::wcout << set_coord() << SColor();
+#endif // TEST
+}
