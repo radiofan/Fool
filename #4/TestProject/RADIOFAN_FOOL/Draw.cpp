@@ -318,12 +318,14 @@ void Draw::draw(App_defenition& app, uint16_t x, uint16_t y){
 }
 
 
-void Draw::draw_win(uint8_t player_ind, uint16_t x, uint16_t y){
+void Draw::draw_win(int8_t player_ind, uint16_t x, uint16_t y){
 #ifndef TEST
 
-	fill(x, y, 47, 7, player_ind == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK, TextColor::GRAY);
+	BackColor bc = (player_ind == 0 ? BackColor::RED_DARK : (player_ind == 1 ? BackColor::BLUE_DARK : BackColor::GRAY_DARK));
 
-	std::wcout << SColor(player_ind == 0 ? BackColor::RED_DARK : BackColor::BLUE_DARK, TextColor::GRAY);
+	fill(x, y, 47, 7, bc, TextColor::GRAY);
+
+	std::wcout << SColor(bc, TextColor::GRAY);
 	std::wcout << set_coord(x, y)   << L"╔═════════════════════════════════════════════╗"
 			   << set_coord(x, y+6) << L"╚═════════════════════════════════════════════╝";
 	for(uint8_t i=1; i<=5; i++){
@@ -331,7 +333,11 @@ void Draw::draw_win(uint8_t player_ind, uint16_t x, uint16_t y){
 			   << set_coord(x+46, y+i) << L"║";
 	}
 	
-	std::wcout << set_coord(x+16, y+3) << L"игрок " << player_ind << L" победил";
+	if(player_ind = -1){
+		std::wcout << set_coord(x+16, y+3) << L"игрок " << player_ind << L" победил";
+	}else{
+		std::wcout << set_coord(x+21, y+3) << L"ничья";
+	}
 	
 	std::wcout << set_coord() << SColor();
 #endif // TEST
